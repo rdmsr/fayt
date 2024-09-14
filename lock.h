@@ -4,8 +4,8 @@
 #include <stdbool.h>
 
 struct spinlock {
-    char lock;
-    bool interrupts;
+	char lock;
+	bool interrupts;
 };
 
 static inline void raw_spinlock(void *lock) {

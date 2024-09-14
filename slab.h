@@ -10,44 +10,42 @@ struct slab;
 struct slab_pool;
 
 struct cache {
-    struct slab_pool *pool;
+	struct slab_pool *pool;
 
-    int object_size;
-    int active_slabs;
-    int pages_per_slab;
+	int object_size;
+	int active_slabs;
+	int pages_per_slab;
 
-    const char *name;
+	const char *name;
 
-    struct slab *slab_empty;
-    struct slab *slab_partial;
-    struct slab *slab_full;
+	struct slab *slab_empty;
+	struct slab *slab_partial;
+	struct slab *slab_full;
 
-    struct cache *next;
+	struct cache *next;
 
-    struct spinlock lock;
+	struct spinlock lock;
 };
 
 struct slab {
-    int available_objects;
-    int total_objects;
+	int available_objects;
+	int total_objects;
 
-    char *bitmap;
-    void *buffer;
+	char *bitmap;
+	void *buffer;
 
-    struct cache *cache;
+	struct cache *cache;
 
-    struct slab *next; 
-    struct slab *last;
+	struct slab *next; 
+	struct slab *last;
 };
 
 struct slab_pool {
-    struct cache *root_cache;
-
-    int page_size;
-    void *data;
-    
-    void *(*page_alloc)(void*, uint64_t);
-    void (*page_free)(void*, uint64_t, uint64_t);
+	int page_size;
+	void *data;
+	
+	void *(*page_alloc)(void*, uint64_t);
+	void (*page_free)(void*, uint64_t, uint64_t);
 };
 
 int slab_cache_create(struct slab_pool *pool, const char *name, size_t object_size);
