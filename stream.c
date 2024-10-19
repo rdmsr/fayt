@@ -7,7 +7,9 @@
 
 static void stream_write_number(struct stream_info *stream, uint64_t nunmber, int base);
 
-void stream_print(struct stream_info *stream, const char *str, va_list arg) {
+int stream_print(struct stream_info *stream, const char *str, va_list arg) {
+	if(stream == NULL || stream->write == NULL) return -1;
+	
 	for(size_t i = 0; i < strlen(str); i++) {
 		if(str[i] != '%') {
 			stream->write(stream, str[i]);
@@ -51,6 +53,8 @@ void stream_print(struct stream_info *stream, const char *str, va_list arg) {
 			}
 		}
 	}
+
+	return 0;
 }
 
 static void stream_write_number(struct stream_info *stream, uint64_t number, int base) {

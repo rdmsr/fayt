@@ -10,6 +10,6 @@ struct stream_info {
 	struct spinlock lock;
 };
 
-void stream_print(struct stream_info *stream, const char *str, va_list arg);
+int stream_print(struct stream_info *stream, const char *str, va_list arg);
 
 #endif

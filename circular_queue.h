@@ -7,10 +7,10 @@
 
 struct circular_queue {
 	void *data;
-	size_t size;
-	size_t obj_size;
-	size_t head;
-	size_t tail;
+	int size;
+	int obj_size;
+	int head;
+	int tail;
 
 	// This is the only atomic field. However, do not treat
 	// this datastructure as a atomic. The rationale for this

@@ -2,7 +2,7 @@
 #include <fayt/string.h>
 #include <fayt/lock.h>
 #include <fayt/compiler.h>
-#include <core/debug.h>
+#include <fayt/debug.h>
 
 static struct slab *cache_alloc_slab(struct cache*);
 static void *slab_alloc(struct slab*);

@@ -14,9 +14,7 @@ uint64_t fnv_hash(char *data, size_t byte_cnt) {
 }
 
 void *hash_table_search(struct hash_table *table, void *key, size_t key_size) {
-	if(table->capacity == 0) {
-		return NULL;
-	}
+	if(table->capacity == 0) return NULL;
 
 	uint64_t hash = fnv_hash(key, key_size);
 
@@ -95,9 +93,7 @@ void hash_table_delete(struct hash_table *table, void *key, size_t key_size) {
 }
 
 void hash_table_destroy(struct hash_table *table) {
-	if(table == NULL) {
-		return;
-	}
+	if(table == NULL) return;
 
 	free(table->data);
 }

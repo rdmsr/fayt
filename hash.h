@@ -8,8 +8,8 @@ struct hash_table {
 	void **keys;
 	void **data;
 
-	int capacity;
-	int element_cnt;
+	size_t capacity;
+	size_t element_cnt;
 };
 
 uint64_t fnv_hash(char *data, size_t size);
