@@ -1,5 +1,5 @@
-#ifndef HASH_H_
-#define HASH_H_
+#ifndef FAYT_HASH_H_
+#define FAYT_HASH_H_
 
 #include <stddef.h>
 #include <stdint.h>
@@ -12,12 +12,10 @@ struct hash_table {
 	size_t element_cnt;
 };
 
-uint64_t fnv_hash(char *data, size_t size);
+int hash_table_push(struct hash_table*, void*, void*, size_t);
+int hash_table_delete(struct hash_table*, void*, size_t);
+int hash_table_destroy(struct hash_table*);
 
-void hash_table_push(struct hash_table *table, void *key, void *data, size_t key_size);
-void hash_table_delete(struct hash_table *table, void *key, size_t key_size);
-void hash_table_destroy(struct hash_table *table);
-
-void *hash_table_search(struct hash_table *table, void *key, size_t key_size);
+int hash_table_search(struct hash_table*, void*, size_t, void**);
 
 #endif

@@ -45,7 +45,7 @@ out_bgi: \
 #define BST_GENERIC_DELETE(TABLE_ROOT, BASE, NODE) ({ \
 	__label__ out_bgd; \
 	int ret = 0; \
-	typeof(NODE) _parent = NODE->parent; \
+	typeof(NODE) _parent = (NODE)->parent; \
 	if((NODE) == NULL) { \
 		ret = -1; \
 		goto out_bgd; \

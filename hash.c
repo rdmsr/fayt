@@ -2,7 +2,7 @@
 #include <fayt/string.h>
 #include <fayt/hash.h>
 
-uint64_t fnv_hash(char *data, size_t byte_cnt) {
+static uint64_t fnv_hash(char *data, size_t byte_cnt) {
 	uint64_t hash = 0xcbf29ce484222325;
 
 	for(size_t i = 0; i < byte_cnt; i++) {
@@ -13,8 +13,9 @@ uint64_t fnv_hash(char *data, size_t byte_cnt) {
 	return hash;
 }
 
-void *hash_table_search(struct hash_table *table, void *key, size_t key_size) {
-	if(table->capacity == 0) return NULL;
+int hash_table_search(struct hash_table *table, void *key, size_t key_size, void **ret) {
+	if(table == NULL || key == NULL || ret == NULL) return -1;
+	if(table->capacity == 0) return 0;
 
 	uint64_t hash = fnv_hash(key, key_size);
 
@@ -22,14 +23,16 @@ void *hash_table_search(struct hash_table *table, void *key, size_t key_size) {
 
 	for(; index < table->capacity; index++) {
 		if(table->keys[index] != NULL && memcmp(table->keys[index], key, key_size) == 0) {
-			return table->data[index];
+			*ret = table->data[index];
+			break;
 		}
 	}
 
-	return NULL;
+	return 0;
 }
 
-void hash_table_push(struct hash_table *table, void *key, void *data, size_t key_size) {
+int hash_table_push(struct hash_table *table, void *key, void *data, size_t key_size) {
+	if(table == NULL || key == NULL) return -1;
 	if(table->capacity == 0) {
 		table->capacity = 16;
 
@@ -48,35 +51,20 @@ void hash_table_push(struct hash_table *table, void *key, void *data, size_t key
 			table->keys[index] = key_copy;
 			table->data[index] = data;
 			table->element_cnt++;
-			return;
+			return 0;
 		}
 	}
 
-	struct hash_table expanded_table = {
-		.capacity = table->capacity * 2,
-		.element_cnt = 0,
-		.data = alloc(table->capacity * sizeof(void*) * 2),
-		.keys = alloc(table->capacity * sizeof(void*) * 2)
-	};
+	table->capacity *= 2;
+	table->data = realloc(table->data, table->capacity * sizeof(void*));
+	table->keys = realloc(table->keys, table->capacity * sizeof(void*));
 
-	for(size_t i = 0; i < table->capacity; i++) {
-		if(table->keys[i] != NULL) {
-			hash_table_push(&expanded_table, table->keys[i], table->data[i], key_size);
-		}
-	}
-
-	free(table->keys);
-	free(table->data);
-
-	hash_table_push(&expanded_table, key, data, key_size);
-
-	*table = expanded_table;
+	return hash_table_push(table, key, data, key_size);
 }
 
-void hash_table_delete(struct hash_table *table, void *key, size_t key_size) {
-	if(table->capacity == 0) {
-		return;
-	}
+int hash_table_delete(struct hash_table *table, void *key, size_t key_size) {
+	if(table == NULL) return -1;
+	if(table->capacity == 0) return -1;
 
 	uint64_t hash = fnv_hash(key, key_size);
 
@@ -87,13 +75,15 @@ void hash_table_delete(struct hash_table *table, void *key, size_t key_size) {
 			table->keys[index] = NULL;
 			table->data[index] = NULL;
 			table->element_cnt--;
-			return;
+			return 0;
 		}
 	}
+
+	return -1;
 }
 
-void hash_table_destroy(struct hash_table *table) {
-	if(table == NULL) return;
-
+int hash_table_destroy(struct hash_table *table) {
+	if(table == NULL) return -1;
 	free(table->data);
+	return 0;
 }
