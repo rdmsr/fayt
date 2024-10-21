@@ -6,17 +6,16 @@
 #include <stddef.h>
 
 #define BITMAP_RESIZEABLE 0
-#define BITMAP_NON_RERESIZEABLE 1
+#define BITMAP_FIXED_SIZE 1
 
 struct bitmap {
-	uint8_t *data;
-	size_t size;
-	bool resizable;
+	unsigned char *data;
+	int size;
+	int resizable;
 };
 
-int64_t bitmap_alloc(struct bitmap *bitmap);
-void bitmap_free(struct bitmap *bitmap, size_t index);
-void bitmap_init(struct bitmap *bitmap, bool resizable, size_t size);
-void bitmap_dup(struct bitmap *bitmap, struct bitmap *dest);
+int bitmap_alloc(struct bitmap*, int*);
+int bitmap_free(struct bitmap*, int index);
+int bitmap_dup(struct bitmap*, struct bitmap*);
 
 #endif
