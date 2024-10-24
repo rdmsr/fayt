@@ -4,7 +4,9 @@
 constexpr int SCHED_NOTIFY_ENQUEUE = 1;
 constexpr int SCHED_NOTIFY_DEQUEUE = 2;
 
-constexpr int NOTIFY_INSTANTANEOUS = 1 << 1;
+constexpr int NOTIFY_WEIGHT_SCHEDULED = (1 << 0);
+constexpr int NOTIFY_WEIGHT_TICK = (1 << 1);
+constexpr int NOTIFY_WEIGHT_INSTANTANEOUS = (1 << 2);
 
 struct comm_bridge {
 	int not;
