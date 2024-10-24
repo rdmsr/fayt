@@ -6,7 +6,7 @@ int bitmap_alloc(struct bitmap *bitmap, int *ret) {
 	if(bitmap == NULL || ret == NULL) return -1;
 	if(bitmap->data == NULL) goto init;
 
-	for(size_t i = 0; i < (bitmap->size * 8); i++) {
+	for(int i = 0; i < (bitmap->size * 8); i++) {
 		if(BIT_TEST(bitmap->data, i) == 0) {
 			BIT_SET(bitmap->data, i); *ret = i;
 			return 0;

@@ -27,6 +27,7 @@ struct [[gnu::packed]] portal_link {
 	int header_limit;
 	int data_offset;
 	int data_limit;
+	uint32_t magic;
 
 	char data[];
 };
