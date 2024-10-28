@@ -1,43 +1,21 @@
 #ifndef FAYT_BST_H_
 #define FAYT_BST_H_
 
-#define BST_GENERIC_SEARCH(ROOT, BASE, VALUE) ({ \
-	typeof(ROOT) *_root = ROOT; \
-	while(_root) { \
-		if(_root->BASE > (VALUE)) { \
-			_root = _root->left; \
-		} else { \
-			_root = _root->right; \
-		} \
-	} \
-	_root \
-})
-
 #define BST_GENERIC_INSERT(TABLE_ROOT, BASE, NODE) ({ \
 	__label__ out_bgi; \
 	int ret = 0; \
-	typeof(TABLE_ROOT) _root = TABLE_ROOT; \
-	typeof(TABLE_ROOT) _parent = NULL; \
-	if((NODE) == NULL) { \
-		ret = -1; \
-		goto out_bgi; \
+	__typeof__(TABLE_ROOT) root = TABLE_ROOT; \
+	__typeof__(TABLE_ROOT) parent = NULL; \
+	if((NODE) == NULL) { ret = -1; goto out_bgi; } \
+	for(; root;) { \
+		parent = root; \
+		if(root->BASE > (NODE)->BASE) root = root->left; \
+		else root = root->right; \
 	} \
-	while(_root) { \
-		_parent = _root; \
-		if(_root->BASE > (NODE)->BASE) { \
-			_root = _root->left; \
-		} else { \
-			_root = _root->right; \
-		} \
-	} \
-	(NODE)->parent = _parent; \
-	if(_parent == NULL) { \
-		TABLE_ROOT = (NODE); \
-	} else if(_parent->BASE > (NODE)->BASE) { \
-		_parent->left = (NODE); \
-	} else { \
-		_parent->right = (NODE); \
-	} \
+	(NODE)->parent = parent; \
+	if(parent == NULL) TABLE_ROOT = (NODE); \
+	else if(parent->BASE > (NODE)->BASE) parent->left = (NODE); \
+	else parent->right = (NODE); \
 out_bgi: \
 	ret; \
 })
@@ -45,47 +23,51 @@ out_bgi: \
 #define BST_GENERIC_DELETE(TABLE_ROOT, BASE, NODE) ({ \
 	__label__ out_bgd; \
 	int ret = 0; \
-	typeof(NODE) _parent = (NODE)->parent; \
+	__typeof__(NODE) parent = (NODE)->parent; \
 	if((NODE) == NULL) { \
 		ret = -1; \
 		goto out_bgd; \
 	} \
 	if((NODE)->left == NULL && (NODE)->right == NULL) { \
-		if(_parent == NULL) TABLE_ROOT = NULL; \
-		else if(_parent->left == (NODE)) _parent->left = NULL; \
-		else _parent->right = NULL; \
+		if(parent == NULL) TABLE_ROOT = NULL; \
+		else if(parent->left == (NODE)) parent->left = NULL; \
+		else parent->right = NULL; \
 	} else if((NODE)->left && (NODE)->right == NULL) { \
-		if(_parent->left == (NODE)) { \
-			_parent->left = (NODE)->left; \
-			_parent->left->parent = _parent; \
+		if(parent == NULL) TABLE_ROOT = (NODE)->left; \
+		else if(parent->left == (NODE)) { \
+			parent->left = (NODE)->left; \
+			parent->left->parent = parent; \
 		} else { \
-			_parent->right = (NODE)->left; \
-			_parent->right->parent = _parent; \
+			parent->right = (NODE)->left; \
+			parent->right->parent = parent; \
 		} \
 	} else if((NODE)->right && (NODE)->left == NULL) { \
-		if(_parent->left == (NODE)) { \
-			_parent->left = (NODE)->right; \
-			_parent->left->parent = _parent; \
+		if(parent == NULL) TABLE_ROOT = (NODE)->right; \
+		else if(parent->left == (NODE)) { \
+			parent->left = (NODE)->right; \
+			parent->left->parent = parent; \
 		} else { \
-			_parent->right = (NODE)->right; \
-			_parent->right->parent = _parent; \
+			parent->right = (NODE)->right; \
+			parent->right->parent = parent; \
 		} \
 	} else { \
-		typeof(NODE) _successor = (NODE)->right; \
-		for(;_successor->left != NULL;) _successor = _successor->left; \
-		if(_successor->parent->left == _successor) { \
-			_successor->parent->left = _successor->right; \
-			if(_successor->right) _successor->right->parent = _successor->parent; \
+		__typeof__(NODE) successor = (NODE)->right; \
+		for(; successor->left;) successor = successor->left; \
+		if(successor->parent != (NODE)) { \
+			successor->parent->left = successor->right; \
+			if(successor->right) successor->right->parent = successor->parent; \
 		} else { \
-			_successor->parent->right = _successor->right; \
-			if(_successor->right) _successor->right->parent = _successor->parent; \
+			successor->parent->right = successor->right; \
+			if(successor->right) successor->right->parent = successor->parent; \
 		} \
-		if(_parent->left == (NODE)) _parent->left = _successor; \
-		else _parent->right = _successor; \
-		_successor->left = (NODE)->left; \
-		if(_successor->left) _successor->left->parent = _successor; \
-		_successor->right = (NODE)->right; \
-		if(_successor->right) _successor->right->parent = _successor; \
+		if(parent == NULL) TABLE_ROOT = successor; \
+		else if(parent->left == (NODE)) parent->left = successor; \
+		else parent->right = successor; \
+		successor->left = (NODE)->left; \
+		if(successor->left) successor->left->parent = successor; \
+		successor->right = (NODE)->right; \
+		if(successor->right) successor->right->parent = successor; \
+		successor->parent = parent; \
 	} \
 out_bgd: \
 	ret; \
