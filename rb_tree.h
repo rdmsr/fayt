@@ -1,6 +1,8 @@
 #ifndef FAYT_RB_TREE_H_
 #define FAYT_RB_TREE_H_
 
+#include <fayt/bst.h>
+
 #define BLACK 0
 #define RED 1
 
