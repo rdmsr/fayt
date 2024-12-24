@@ -100,7 +100,7 @@ int slab_cache_create(struct slab_pool *pool, const char *name, size_t object_si
 	cache.pool = pool;
 
 	struct slab *root_slab = cache_alloc_slab(&cache);
-	if(root_slab == NULL) return -1;
+	if(root_slab == NULL) RETURN_ERROR;
 
 	*(struct cache*)root_slab->buffer = cache;
 	struct cache *new_cache = (struct cache*)root_slab->buffer;
@@ -120,7 +120,7 @@ int slab_cache_create(struct slab_pool *pool, const char *name, size_t object_si
 }
 
 static int cache_move_slab(struct slab **dest_head, struct slab **src_head, struct slab *src) {
-	if(!src || !*src_head) return -1; 
+	if(!src || !*src_head) RETURN_ERROR; 
 	if(src->next != NULL) src->next->last = src->last;
 	if(src->last != NULL) src->last->next = src->next;
 	if(*src_head == src) *src_head = src->next;
@@ -147,8 +147,8 @@ static int cache_move_slab(struct slab **dest_head, struct slab **src_head, stru
 }
 
 static size_t slab_get_object_size(struct slab *slab, void *obj) {
-	if(unlikely(slab == NULL)) return -1;
-	if(unlikely(slab->cache == NULL)) return -1;
+	if(unlikely(slab == NULL)) return 0;
+	if(unlikely(slab->cache == NULL)) return 0;
 
 	spinlock(&slab->cache->lock);
 
@@ -169,7 +169,7 @@ static size_t slab_get_object_size(struct slab *slab, void *obj) {
 }
 
 static size_t cache_get_object_size(struct cache *cache, void *obj) {
-	if(unlikely(cache == NULL)) return -1;
+	if(unlikely(cache == NULL)) RETURN_ERROR;
 
 	size_t partial_object_size = slab_get_object_size(cache->slab_partial, obj);
 	if(partial_object_size)	return partial_object_size;
@@ -181,8 +181,7 @@ static size_t cache_get_object_size(struct cache *cache, void *obj) {
 }
 
 static int slab_free_object(struct slab *slab, void *obj) {
-	if(unlikely(slab == NULL)) return -1;
-	if(unlikely(slab->cache == NULL)) return -1;
+	if(unlikely(slab == NULL)) RETURN_ERROR;
 
 	spinlock(&slab->cache->lock);
 
@@ -198,7 +197,7 @@ static int slab_free_object(struct slab *slab, void *obj) {
 
 				spinrelease(&root->cache->lock);
 
-				return 0;
+				return slab->cache->object_size;
 			}
 		}
 
@@ -207,20 +206,18 @@ static int slab_free_object(struct slab *slab, void *obj) {
 
 	spinrelease(&root->cache->lock);
 
-	return -1;
+	return 0;
 }
 
 static int cache_free_object(struct cache *cache, void *obj) {
-	if(slab_free_object(cache->slab_partial, obj)) return 0;
-	else if(slab_free_object(cache->slab_full, obj)) return 0;
-	else return -1;
+	if(cache == NULL || obj == NULL) RETURN_ERROR;
+	if(cache->slab_partial && slab_free_object(cache->slab_partial, obj)) return 0;
+	else if(cache->slab_full && slab_free_object(cache->slab_full, obj)) return 0;
+	else return 0;
 }
 
-
 void *alloc(size_t size) {
-	if(!size) {
-		return NULL;
-	}
+	if(!size) return NULL;
 
 	int round_size = pow2_roundup(size + 1);
 	if(round_size <= 16) {

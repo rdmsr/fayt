@@ -12,7 +12,9 @@ constexpr int SYSCALL_NOTIFICATION_DEFINE_STACK = 4;
 constexpr int SYSCALL_NOTIFICATION_RETURN = 5;
 constexpr int SYSCALL_NOTIFICATION_MUTE = 6;
 constexpr int SYSCALL_NOTIFICATION_UNMUTE = 7;
-constexpr int SYSCALL_NOTIFY = 8;
+constexpr int SYSCALL_NOTIFICATION_BUILD = 8;
+constexpr int SYSCALL_NOTIFICATION_BROADCAST = 9;
+constexpr int SYSCALL_CONTEXT = 10;
 
 struct syscall_response {
 	int ret; 

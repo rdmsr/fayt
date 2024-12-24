@@ -1,6 +1,7 @@
 #include <fayt/slab.h>
 #include <fayt/string.h>
 #include <fayt/hash.h>
+#include <fayt/debug.h>
 
 static uint64_t fnv_hash(char *data, size_t byte_cnt) {
 	uint64_t hash = 0xcbf29ce484222325;
@@ -14,7 +15,7 @@ static uint64_t fnv_hash(char *data, size_t byte_cnt) {
 }
 
 int hash_table_search(struct hash_table *table, void *key, size_t key_size, void **ret) {
-	if(table == NULL || key == NULL || ret == NULL) return -1;
+	if(table == NULL || key == NULL || ret == NULL) RETURN_ERROR;
 	if(table->capacity == 0) return 0;
 
 	uint64_t hash = fnv_hash(key, key_size);
@@ -32,7 +33,7 @@ int hash_table_search(struct hash_table *table, void *key, size_t key_size, void
 }
 
 int hash_table_push(struct hash_table *table, void *key, void *data, size_t key_size) {
-	if(table == NULL || key == NULL) return -1;
+	if(table == NULL || key == NULL) RETURN_ERROR;
 	if(table->capacity == 0) {
 		table->capacity = 16;
 
@@ -63,8 +64,8 @@ int hash_table_push(struct hash_table *table, void *key, void *data, size_t key_
 }
 
 int hash_table_delete(struct hash_table *table, void *key, size_t key_size) {
-	if(table == NULL) return -1;
-	if(table->capacity == 0) return -1;
+	if(table == NULL) RETURN_ERROR;
+	if(table->capacity == 0) RETURN_ERROR;
 
 	uint64_t hash = fnv_hash(key, key_size);
 
@@ -79,11 +80,11 @@ int hash_table_delete(struct hash_table *table, void *key, size_t key_size) {
 		}
 	}
 
-	return -1;
+	RETURN_ERROR;
 }
 
 int hash_table_destroy(struct hash_table *table) {
-	if(table == NULL) return -1;
+	if(table == NULL) RETURN_ERROR;
 	free(table->data);
 	return 0;
 }

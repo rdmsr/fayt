@@ -29,6 +29,11 @@ _ret: \
 	(THIS).data[(THIS).length++] = ELEMENT; \
 })
 
+#define VECTOR_PEEK(THIS, ELEMENT) ({ \
+	__label__ finish; \
+	finish: \
+})
+
 #define VECTOR_INDEX(THIS, ELEMENT, INDEX) ({ \
 	if((INDEX) > (THIS).buffer_capacity) { \
 		(THIS).buffer_capacity += (INDEX) - (THIS).buffer_capacity; \

@@ -20,14 +20,14 @@ constexpr uint32_t PORTAL_PROT_WRITE = 1u << 1;
 constexpr uint32_t PORTAL_PROT_EXEC = 1u << 2;
 
 struct [[gnu::packed]] portal_link {
-	char lock;
+	int lock;
 
 	int length;
 	int header_offset;
 	int header_limit;
 	int data_offset;
 	int data_limit;
-	uint32_t magic;
+	int magic;
 
 	char data[];
 };
@@ -50,9 +50,9 @@ constexpr uint32_t LINK_RAW_MAGIC = 0xFF6C7D34;
 	if((LINK) == NULL) goto out_ol; \
 	static_assert((CLASS) == LINK_CIRCULAR || \
 		(CLASS) == LINK_VECTOR || (CLASS) == LINK_RAW, "Invalid link class"); \
-	if(*(int*)((LINK)->data + (LINK)->header_offset) != ((CLASS) == LINK_CIRCULAR) ? \
+	if((LINK)->magic != (((CLASS) == LINK_CIRCULAR) ? \
 		LINK_CIRCULAR_MAGIC : ((CLASS == LINK_VECTOR) ? \
-		LINK_VECTOR_MAGIC : (((CLASS) == LINK_RAW) ? LINK_RAW_MAGIC : 0))) goto out_ol; \
+		LINK_VECTOR_MAGIC : (((CLASS) == LINK_RAW) ? LINK_RAW_MAGIC : 0)))) goto out_ol; \
 	raw_spinlock(&(LINK)->lock); \
 	_ret = OPERATION; \
 	raw_spinrelease(&(LINK)->lock); \
@@ -67,8 +67,9 @@ struct [[gnu::packed]] portal_req {
 
 	struct [[gnu::packed]] {
 		const char *identifier;
-		int type;
 		int create;
+		int length;
+		int type;
 	} share;
 
 	struct [[gnu::packed]] {

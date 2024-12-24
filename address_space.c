@@ -5,7 +5,7 @@
 
 static int allocate_address(struct address_space *as, uint64_t *ret, size_t size) {
 	if(as == NULL || ret == NULL || size == 0 ||
-		(as->current + size) > (as->base + as->limit)) return -1;
+		(as->current + size) > (as->base + as->limit)) RETURN_ERROR;
 
 	uintptr_t address = as->current;
 
@@ -21,10 +21,10 @@ static int allocate_address(struct address_space *as, uint64_t *ret, size_t size
 }
 
 int as_allocate(struct address_space *as, uintptr_t *address, size_t cnt) {
-	if(as == NULL || address == NULL) return -1;
+	if(as == NULL || address == NULL) RETURN_ERROR;
 
 	int ret = allocate_address(as, address, cnt);
-	if(ret == -1) return -1;
+	if(ret == -1) RETURN_ERROR;
 
 	struct portal_req portal_req = {
 		.type = PORTAL_REQ_ANON,
@@ -45,13 +45,13 @@ int as_allocate(struct address_space *as, uintptr_t *address, size_t cnt) {
 
 	struct syscall_response syscall_response = SYSCALL2(SYSCALL_PORTAL, &portal_req, &portal_resp);
 	if(syscall_response.ret == -1 || portal_resp.base != *address ||
-		portal_resp.limit != (cnt * PAGE_SIZE)) return -1;
+		portal_resp.limit != (cnt * PAGE_SIZE)) RETURN_ERROR;
 
 	return 0;
 }
 
 int as_insert_hole(struct address_space *as, struct address_hole *hole) {
-	if(as == NULL || hole == NULL) return -1;
+	if(as == NULL || hole == NULL) RETURN_ERROR;
 
 	if(as->hole_root == NULL) {
 		as->hole_root = hole;
@@ -69,7 +69,7 @@ int as_insert_hole(struct address_space *as, struct address_hole *hole) {
 }
 
 int as_delete_hole(struct address_space *as, uintptr_t base, size_t limit) {
-	if(as == NULL) return -1;
+	if(as == NULL) RETURN_ERROR;
 
 	struct address_hole *hole = as->hole_root;
 

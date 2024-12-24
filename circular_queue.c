@@ -2,8 +2,8 @@
 #include <fayt/string.h>
 #include <fayt/slab.h>
 
-void circular_queue_init(struct circular_queue *queue, void *data, size_t size, size_t obj_size) {
-	queue->data = data == NULL ? alloc(size * obj_size) : data;
+void circular_queue_init(struct circular_queue *queue, int data_offset, size_t size, size_t obj_size) {
+	queue->data_offset = data_offset;
 	queue->size = size;
 	queue->obj_size = obj_size;
 	queue->head = -1;
@@ -12,7 +12,7 @@ void circular_queue_init(struct circular_queue *queue, void *data, size_t size, 
 }
 
 void circular_queue_destroy(struct circular_queue *queue) {
-	free(queue->data);
+	free(queue);
 }
 
 bool circular_queue_push(struct circular_queue *queue, const void *data) {
@@ -31,7 +31,7 @@ bool circular_queue_push(struct circular_queue *queue, const void *data) {
 		}
 	}
 
-	memcpy(queue->data + (queue->tail * queue->obj_size), data, queue->obj_size);
+	memcpy((void*)queue + queue->data_offset + (queue->tail * queue->obj_size), data, queue->obj_size);
 	__atomic_add_fetch(&queue->items, 1, __ATOMIC_RELAXED);
 
 	return true;
@@ -42,7 +42,7 @@ bool circular_queue_pop(struct circular_queue *queue, void *data) {
 		return false;
 	}
 
-	memcpy(data, queue->data + (queue->head * queue->obj_size), queue->obj_size);
+	memcpy(data, (void*)queue + queue->data_offset + (queue->head * queue->obj_size), queue->obj_size);
 	__atomic_sub_fetch(&queue->items, 1, __ATOMIC_RELAXED);
 
 	if(queue->head == queue->tail) {
@@ -70,7 +70,7 @@ bool circular_queue_pop_tail(struct circular_queue *queue, void *data) {
 		queue->tail--;
 	}
 
-	memcpy(data, queue->data + (queue->tail * queue->obj_size), queue->obj_size);
+	memcpy(data, (void*)queue + queue->data_offset + (queue->tail * queue->obj_size), queue->obj_size);
 	__atomic_sub_fetch(&queue->items, 1, __ATOMIC_RELAXED);
 
 	return true;
@@ -81,7 +81,7 @@ bool circular_queue_peek(struct circular_queue *queue, void *data) {
 		return false;
 	}
 
-	memcpy(data, queue->data + (queue->head * queue->obj_size), queue->obj_size);
+	memcpy(data, (void*)queue + queue->data_offset + (queue->head * queue->obj_size), queue->obj_size);
 
 	return true;
 }
