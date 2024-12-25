@@ -74,9 +74,6 @@ out_bgi: \
 		successor->parent = parent; \
 	} \
 out_bgd: \
-	(NODE)->parent = NULL; \
-	(NODE)->left = NULL; \
-	(NODE)->right = NULL; \
 	ret; \
 })
 

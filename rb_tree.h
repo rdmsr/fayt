@@ -148,6 +148,9 @@ out_rbi: \
 		} \
 	} \
 out_rbd: \
+	(NODE)->parent = NULL; \
+	(NODE)->left = NULL; \
+	(NODE)->right = NULL; \
 	ret; \
 })
 
