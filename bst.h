@@ -17,6 +17,8 @@
 	else if(parent->BASE > (NODE)->BASE) parent->left = (NODE); \
 	else parent->right = (NODE); \
 out_bgi: \
+	(NODE)->left = NULL; \
+	(NODE)->right = NULL; \
 	ret; \
 })
 
@@ -41,6 +43,7 @@ out_bgi: \
 			parent->right = (NODE)->left; \
 			parent->right->parent = parent; \
 		} \
+		(NODE)->left->parent = parent; \
 	} else if((NODE)->right && (NODE)->left == NULL) { \
 		if(parent == NULL) TABLE_ROOT = (NODE)->right; \
 		else if(parent->left == (NODE)) { \
@@ -50,6 +53,7 @@ out_bgi: \
 			parent->right = (NODE)->right; \
 			parent->right->parent = parent; \
 		} \
+		(NODE)->right->parent = parent; \
 	} else { \
 		__typeof__(NODE) successor = (NODE)->right; \
 		for(; successor->left;) successor = successor->left; \
@@ -70,6 +74,9 @@ out_bgi: \
 		successor->parent = parent; \
 	} \
 out_bgd: \
+	(NODE)->parent = NULL; \
+	(NODE)->left = NULL; \
+	(NODE)->right = NULL; \
 	ret; \
 })
 

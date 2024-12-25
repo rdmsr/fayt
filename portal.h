@@ -22,12 +22,12 @@ constexpr uint32_t PORTAL_PROT_EXEC = 1u << 2;
 struct [[gnu::packed]] portal_link {
 	int lock;
 
-	int length;
-	int header_offset;
-	int header_limit;
-	int data_offset;
-	int data_limit;
-	int magic;
+	unsigned int length;
+	unsigned int header_offset;
+	unsigned int header_limit;
+	unsigned int data_offset;
+	unsigned int data_limit;
+	unsigned int magic;
 
 	char data[];
 };

@@ -15,6 +15,8 @@ constexpr int SYSCALL_NOTIFICATION_UNMUTE = 7;
 constexpr int SYSCALL_NOTIFICATION_BUILD = 8;
 constexpr int SYSCALL_NOTIFICATION_BROADCAST = 9;
 constexpr int SYSCALL_CONTEXT = 10;
+constexpr int SYSCALL_SCHED_ACQUIRE = 11;
+constexpr int SYSCALL_SCHED_RELEASE = 12;
 
 struct syscall_response {
 	int ret; 

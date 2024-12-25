@@ -1,6 +1,7 @@
 #include <fayt/circular_queue.h>
 #include <fayt/string.h>
 #include <fayt/slab.h>
+#include <fayt/debug.h>
 
 void circular_queue_init(struct circular_queue *queue, int data_offset, size_t size, size_t obj_size) {
 	queue->data_offset = data_offset;
