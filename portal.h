@@ -75,7 +75,7 @@ struct [[gnu::packed]] portal_req {
 	struct [[gnu::packed]] {
 		uintptr_t addr;
 		size_t length;
-		int paddr;
+		uint64_t paddr;
 		int pcnt;
 	} morphology;
 };
