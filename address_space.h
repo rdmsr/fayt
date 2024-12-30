@@ -26,6 +26,7 @@ struct address_space {
 int as_allocate(struct address_space*, uintptr_t*, size_t);
 int as_insert_hole(struct address_space*, struct address_hole*);
 int as_delete_hole(struct address_space*, uintptr_t, size_t);
+int as_address(struct address_space*, uintptr_t*, size_t);
 
 extern struct address_space address_space;
 
