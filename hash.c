@@ -19,17 +19,16 @@ int hash_table_search(struct hash_table *table, void *key, size_t key_size, void
 	if(table->capacity == 0) return 0;
 
 	uint64_t hash = fnv_hash(key, key_size);
-
 	size_t index = hash & (table->capacity - 1);
 
 	for(; index < table->capacity; index++) {
 		if(table->keys[index] != NULL && memcmp(table->keys[index], key, key_size) == 0) {
 			*ret = table->data[index];
-			break;
+			return 0;
 		}
 	}
 
-	return 0;
+	return -1;
 }
 
 int hash_table_push(struct hash_table *table, void *key, void *data, size_t key_size) {
@@ -52,7 +51,6 @@ int hash_table_push(struct hash_table *table, void *key, void *data, size_t key_
 			table->keys[index] = key_copy;
 			table->data[index] = data;
 			table->element_cnt++;
-
 			return 0;
 		}
 	}
