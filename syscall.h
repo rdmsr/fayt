@@ -17,6 +17,7 @@ constexpr int SYSCALL_NOTIFICATION_BROADCAST = 9;
 constexpr int SYSCALL_CONTEXT = 10;
 constexpr int SYSCALL_SCHED_ACQUIRE = 11;
 constexpr int SYSCALL_SCHED_RELEASE = 12;
+constexpr int SYSCALL_SERVER_ACTIVATE = 13;
 
 struct syscall_response {
 	int ret; 
@@ -60,12 +61,14 @@ struct syscall_response {
 })
 
 #define SYSCALL4(NUM, ARG0, ARG1, ARG2, ARG3) ({ \
+	struct syscall_response _response; \
 	register uint64_t arg3 __asm__("r10") = (uint64_t)ARG3; \
 	__asm__ volatile ("syscall" \
 					: "=a"(_response.ret), "=d"(_response.code) \
 					: "a"(NUM), "D"(ARG0), "S"(ARG1), "d"(ARG2), \
 					"r"(arg3) \
 					: "rcx", "r11", "memory"); \
+	_response; \
 })
 
 #define SYSCALL5(NUM, ARG0, ARG1, ARG2, ARG3, ARG4) ({ \

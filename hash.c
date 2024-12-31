@@ -52,6 +52,7 @@ int hash_table_push(struct hash_table *table, void *key, void *data, size_t key_
 			table->keys[index] = key_copy;
 			table->data[index] = data;
 			table->element_cnt++;
+
 			return 0;
 		}
 	}
