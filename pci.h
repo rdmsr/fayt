@@ -71,4 +71,24 @@ union [[gnu::packed]] pci_config {
 	struct pci_config_device bridge;
 };
 
+struct pci_bar {
+	uint64_t base;
+	uint64_t limit;
+	bool is_mmio;
+	bool is_prefetchable;
+};
+
+struct pci_descriptor {
+	int segment;
+	int bus;
+	int device;
+	int func;
+};
+
+struct pci_notify_bar {
+	struct pci_descriptor descriptor;
+	struct pci_bar bar;
+	bool valid;
+};
+
 #endif
