@@ -4,6 +4,8 @@
 #include <fayt/debug.h>
 #include <fayt/string.h>
 
+#ifndef DUFAY
+
 int notify_and_block(struct comm_bridge *bridge) {
 	if(bridge == NULL) return -1;
 
@@ -24,3 +26,5 @@ int notify_and_block(struct comm_bridge *bridge) {
 
 	return 0;
 }
+
+#endif

@@ -3,6 +3,8 @@
 #include <fayt/portal.h>
 #include <fayt/debug.h>
 
+#ifndef DUFAY
+
 int as_address(struct address_space *as, uintptr_t *ret, size_t size) {
 	if(as == NULL || ret == NULL || size == 0 ||
 		(as->current + size) > (as->base + as->limit)) RETURN_ERROR;
@@ -89,3 +91,5 @@ int as_delete_hole(struct address_space *as, uintptr_t base, size_t limit) {
 
 	return 0;
 }
+
+#endif
