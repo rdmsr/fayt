@@ -1,4 +1,4 @@
-#ifndef FAYT_PCI_H
+#ifndef FAYT_PCI_H_
 #define FAYT_PCI_H_
 
 #include <stdint.h>
