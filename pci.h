@@ -85,9 +85,10 @@ struct pci_descriptor {
 	int func;
 };
 
-struct pci_notify_bar {
+struct pci_nbar {
 	struct pci_descriptor descriptor;
 	struct pci_bar bar;
+	int bar_index;
 	bool valid;
 };
 
