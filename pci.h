@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include <stddef.h>
 
+constexpr int NOT_PCI_BAR = 1;
+
 struct [[gnu::packed]] pci_config_device {
 	uint16_t vendor_id;
 	uint16_t device_id;

@@ -1,11 +1,6 @@
 #ifndef FAYT_NOTIFICATION_H_
 #define FAYT_NOTIFICATION_H_
 
-constexpr int SCHED_ENQUEUE = 1;
-constexpr int SCHED_DEQUEUE = 2;
-
-constexpr int PCI_BAR = 1;
-
 constexpr int NOTIFY_WEIGHT_SCHEDULED = (1 << 0);
 constexpr int NOTIFY_WEIGHT_TICK = (1 << 1);
 constexpr int NOTIFY_WEIGHT_INSTANTANEOUS = (1 << 2);
