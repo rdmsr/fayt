@@ -52,3 +52,7 @@ struct time time_sub(struct time a, struct time b) {
 
 	return ret;
 }
+
+time_t time_to_ns(struct time a) {
+	return S_TO_NS(a.sec) + a.nsec;
+}
