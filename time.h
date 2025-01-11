@@ -6,6 +6,10 @@
 
 #define NANO_PER_SECOND 1000000000
 
+#define S_TO_NS(S) ((S) * 1000000000)
+#define MS_TO_NS(MS) ((MS) * 1000000)
+#define US_TO_NS(US) ((US) * 1000)
+
 typedef int64_t time_t;
 typedef int64_t freq_t;
 
