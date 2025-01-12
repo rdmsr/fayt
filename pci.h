@@ -94,4 +94,15 @@ struct pci_nbar {
 	bool valid;
 };
 
+struct pci_nmsi {
+	struct pci_descriptor descriptor;
+	int irq_vector;
+	bool valid;
+};
+
+struct pci_info {
+	struct pci_descriptor descriptor;
+	int irq_vector;
+};
+
 #endif

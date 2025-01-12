@@ -2,12 +2,15 @@
 #include <fayt/syscall.h>
 #include <fayt/portal.h>
 #include <fayt/debug.h>
+#include <fayt/string.h>
 
 #ifndef DUFAY
 
 int as_address(struct address_space *as, uintptr_t *ret, size_t size) {
 	if(as == NULL || ret == NULL || size == 0 ||
 		(as->current + size) > (as->base + as->limit)) RETURN_ERROR;
+
+	size = DIV_ROUNDUP(size, PAGE_SIZE) * PAGE_SIZE;
 
 	uintptr_t address = as->current;
 
