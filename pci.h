@@ -5,6 +5,7 @@
 #include <stddef.h>
 
 constexpr int NOT_PCI_BAR = 1;
+constexpr int NOT_PCI_MSI = 2;
 
 struct [[gnu::packed]] pci_config_device {
 	uint16_t vendor_id;
@@ -73,36 +74,40 @@ union [[gnu::packed]] pci_config {
 	volatile struct pci_config_bridge bridge;
 };
 
-struct pci_bar {
+struct [[gnu::packed]] pci_bar {
 	uint64_t base;
 	uint64_t limit;
-	bool is_mmio;
-	bool is_prefetchable;
+	int is_mmio;
+	int is_prefetchable;
 };
 
-struct pci_descriptor {
+struct [[gnu::packed]] pci_descriptor {
 	int segment;
 	int bus;
 	int device;
 	int func;
 };
 
-struct pci_nbar {
+struct [[gnu::packed]] pci_nbar {
 	struct pci_descriptor descriptor;
 	struct pci_bar bar;
 	int bar_index;
-	bool valid;
+	int valid;
 };
 
-struct pci_nmsi {
+struct [[gnu::packed]] pci_nmsi {
 	struct pci_descriptor descriptor;
 	int irq_vector;
-	bool valid;
+	int msix;
+	int valid;
 };
 
-struct pci_info {
+struct [[gnu::packed]] pci_info {
 	struct pci_descriptor descriptor;
+	int msi_capable;
+	int msix_capable;
 	int irq_vector;
 };
+
 
 #endif
