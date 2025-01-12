@@ -69,8 +69,8 @@ struct [[gnu::packed]] pci_config_bridge {
 };
 
 union [[gnu::packed]] pci_config {
-	struct pci_config_bridge device;
-	struct pci_config_device bridge;
+	volatile struct pci_config_device device;
+	volatile struct pci_config_bridge bridge;
 };
 
 struct pci_bar {
