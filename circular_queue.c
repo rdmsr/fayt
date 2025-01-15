@@ -12,10 +12,6 @@ void circular_queue_init(struct circular_queue *queue, int data_offset, size_t s
 	queue->items = 0;
 }
 
-void circular_queue_destroy(struct circular_queue *queue) {
-	free(queue);
-}
-
 bool circular_queue_push(struct circular_queue *queue, const void *data) {
 	if((queue->head == 0 && queue->tail == (queue->size - 1)) || (queue->head == (queue->tail + 1))) {
 		return false;
@@ -85,4 +81,14 @@ bool circular_queue_peek(struct circular_queue *queue, void *data) {
 	memcpy(data, (void*)queue + queue->data_offset + (queue->head * queue->obj_size), queue->obj_size);
 
 	return true;
+}
+
+void circular_queue_flush(struct circular_queue *queue) {
+	queue->head = -1;
+	queue->tail = -1;
+	queue->items = 0;
+}
+
+void circular_queue_destroy(struct circular_queue *queue) {
+	free(queue);
 }

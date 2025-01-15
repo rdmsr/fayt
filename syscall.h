@@ -19,6 +19,7 @@ constexpr int SYSCALL_SCHED_ACQUIRE = 11;
 constexpr int SYSCALL_SCHED_RELEASE = 12;
 constexpr int SYSCALL_SERVER_ACTIVATE = 13;
 constexpr int SYSCALL_NOTIFICATION_WAIT = 14;
+constexpr int SYSCALL_NOTIFICATION_DESTROY = 15;
 
 struct syscall_response {
 	int ret; 
