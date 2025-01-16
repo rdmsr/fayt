@@ -5,7 +5,7 @@
 
 struct spinlock {
 	char lock;
-	bool interrupts;
+	int interrupts;
 };
 
 static inline void raw_spinlock(void *lock) {
