@@ -109,5 +109,34 @@ struct [[gnu::packed]] pci_info {
 	int irq_vector;
 };
 
+struct [[gnu::packed]] mcfg_entry {
+	uint64_t base;
+	uint16_t segment;
+	uint8_t bus_start;
+	uint8_t bus_end;
+	uint32_t reserved;
+};
+
+struct [[gnu::packed]] mcfg {
+	char signature[4];
+	uint32_t length;
+	uint8_t revision;
+	uint8_t checksum;
+	char OEMID[6];
+	char OEM_table_id[8];
+	uint32_t OEM_revision;
+	uint32_t creator_ID;
+	uint32_t creator_revision;
+
+	uint64_t reserved;
+
+	struct mcfg_entry entry[];
+};
+
+struct [[gnu::packed]] pci_server_meta {
+	struct mcfg *mcfg;
+	int logical_processor_cnt;
+	int lapic_id[];
+};
 
 #endif

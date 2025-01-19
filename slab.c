@@ -108,7 +108,7 @@ int slab_cache_create(struct slab_pool *pool, const char *name, size_t object_si
 	root_slab->cache = new_cache;
 	root_slab->buffer += sizeof(struct cache);
 	root_slab->buffer = (void*)(ALIGN_UP((uintptr_t)root_slab->buffer, 16));
-	root_slab->available_objects -= DIV_ROUNDUP(object_size, sizeof(struct cache));
+	root_slab->available_objects -= DIV_ROUNDUP(sizeof(struct cache), object_size);
 	root_slab->total_objects = root_slab->available_objects;
 
 	new_cache->slab_empty = root_slab;
