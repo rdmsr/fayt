@@ -11,6 +11,8 @@ constexpr uint32_t PORTAL_REQ_DIRECT = 1u << 1;
 constexpr uint32_t PORTAL_REQ_ANON = 1u << 2;
 constexpr uint32_t PORTAL_REQ_COW = 1u << 3;
 constexpr uint32_t PORTAL_REQ_SP = 1u << 4;
+constexpr uint32_t PORTAL_REQ_CONTINUOUS = 1u << 5;
+constexpr uint32_t PORTAL_REQ_PEEK = 1u << 6;
 
 constexpr uint32_t PORTAL_RESP_FAILURE = 1u << 0;
 constexpr uint32_t PORTAL_RESP_SUCCESS = 1u << 1;
@@ -84,6 +86,11 @@ struct [[gnu::packed]] portal_resp {
 	uintptr_t base;
 	uint64_t limit;
 	uint64_t flags;
+
+	struct [[gnu::packed]] {
+		uint64_t paddr;
+		int pcnt;
+	} morphology;
 };
 
 #endif
