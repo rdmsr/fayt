@@ -37,11 +37,13 @@ int hash_table_push(struct hash_table *table, void *key, void *data, size_t key_
 		table->capacity = 16;
 
 		table->data = alloc(table->capacity * sizeof(void*));
+		if(table->data == NULL) RETURN_ERROR;
+
 		table->keys = alloc(table->capacity * sizeof(void*));
+		if(table->keys == NULL) RETURN_ERROR;
 	}
 
 	uint64_t hash = fnv_hash(key, key_size);
-
 	size_t index = hash & (table->capacity - 1);
 
 	for(; index < table->capacity; index++) {
@@ -56,8 +58,12 @@ int hash_table_push(struct hash_table *table, void *key, void *data, size_t key_
 	}
 
 	table->capacity *= 2;
+
 	table->data = realloc(table->data, table->capacity * sizeof(void*));
+	if(table->data == NULL) RETURN_ERROR;
+
 	table->keys = realloc(table->keys, table->capacity * sizeof(void*));
+	if(table->keys == NULL) RETURN_ERROR;
 
 	return hash_table_push(table, key, data, key_size);
 }
@@ -67,7 +73,6 @@ int hash_table_delete(struct hash_table *table, void *key, size_t key_size) {
 	if(table->capacity == 0) RETURN_ERROR;
 
 	uint64_t hash = fnv_hash(key, key_size);
-
 	size_t index = hash & (table->capacity - 1);
 
 	for(; index < table->capacity; index++) {
@@ -84,6 +89,8 @@ int hash_table_delete(struct hash_table *table, void *key, size_t key_size) {
 
 int hash_table_destroy(struct hash_table *table) {
 	if(table == NULL) RETURN_ERROR;
+
 	free(table->data);
+
 	return 0;
 }

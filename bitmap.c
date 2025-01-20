@@ -20,6 +20,7 @@ init:
 		else bitmap->size *= 2;
 
 		bitmap->data = realloc(bitmap->data, bitmap->size);
+		if(bitmap->data == NULL) RETURN_ERROR;
 
 		return bitmap_alloc(bitmap, ret);
 	}
