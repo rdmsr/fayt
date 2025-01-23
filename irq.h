@@ -17,4 +17,12 @@ struct anchor {
 	struct spinlock lock;
 };
 
+struct irq_state {
+	uint64_t padding0[15];
+	uint64_t vector;
+	uint64_t flush;
+	uint64_t padding1[5]
+};
+
+
 #endif
