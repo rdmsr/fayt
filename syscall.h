@@ -14,14 +14,13 @@ constexpr int SYSCALL_NOTIFICATION_MUTE = 6;
 constexpr int SYSCALL_NOTIFICATION_UNMUTE = 7;
 constexpr int SYSCALL_NOTIFICATION_BUILD = 8;
 constexpr int SYSCALL_NOTIFICATION_BROADCAST = 9;
-constexpr int SYSCALL_CONTEXT = 10;
-constexpr int SYSCALL_SCHED_ACQUIRE = 11;
-constexpr int SYSCALL_SCHED_RELEASE = 12;
-constexpr int SYSCALL_SERVER_ACTIVATE = 13;
-constexpr int SYSCALL_NOTIFICATION_WAIT = 14;
-constexpr int SYSCALL_NOTIFICATION_DESTROY = 15;
-constexpr int SYSCALL_IRQ_CORTEX_INSTANTIATE = 16;
-constexpr int SYSCALL_IRQ_CORTEX_ANCHOR = 17;
+constexpr int SYSCALL_SCHED_ACQUIRE = 10;
+constexpr int SYSCALL_SCHED_RELEASE = 11;
+constexpr int SYSCALL_SERVER_ACTIVATE = 12
+constexpr int SYSCALL_NOTIFICATION_WAIT = 13;
+constexpr int SYSCALL_NOTIFICATION_DESTROY = 14;
+constexpr int SYSCALL_IRQ_CORTEX_INSTANTIATE = 15;
+constexpr int SYSCALL_IRQ_CORTEX_ANCHOR = 16;
 
 struct syscall_response {
 	int ret; 

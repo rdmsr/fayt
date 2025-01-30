@@ -15,7 +15,7 @@ int bitmap_alloc(struct bitmap *bitmap, int *ret) {
 	}
 
 init:
-	if(bitmap->resizable == BITMAP_RESIZEABLE) {
+	if(bitmap->data == NULL || bitmap->resizable == BITMAP_RESIZEABLE) {
 		if(!bitmap->size) bitmap->size = 2;
 		else bitmap->size *= 2;
 

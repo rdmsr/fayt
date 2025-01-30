@@ -3,6 +3,7 @@
 
 #include <fayt/time.h>
 
+constexpr int SCHED_RESERVED_CID = 0x20;
 constexpr int SCHED_TICK_RATE_MS = 20;
 constexpr int NOT_SCHED_ENQUEUE = 1;
 constexpr int NOT_SCHED_DEQUEUE = 2;
@@ -28,6 +29,11 @@ struct sched_queue_config {
 struct sched_queue_config_set {
 	int cnt;
 	struct sched_queue_config config[];
+};
+
+struct sched_queue_entry {
+	int cid;
+	int asid;
 };
 
 #endif
