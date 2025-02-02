@@ -75,6 +75,20 @@ struct [[gnu::packed]] portal_req {
 	} share;
 
 	struct [[gnu::packed]] {
+		struct {
+			int asid;
+			uintptr_t base;
+		} source;
+
+		struct {
+			int asid;
+			uintptr_t base;
+		} destination;
+
+		size_t limit;
+	} cow;
+
+	struct [[gnu::packed]] {
 		uintptr_t addr;
 		size_t length;
 		uint64_t paddr;
