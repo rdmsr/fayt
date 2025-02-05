@@ -12,18 +12,18 @@ constexpr int NOT_SCHED_ENQUEUE = 1;
 constexpr int NOT_SCHED_DEQUEUE = 2;
 constexpr int NOT_SCHED_CLONE = 3;
 
+struct sched_proc_id {
+	int cgid;
+	int cid;
+};
+
 struct sched_descriptor {
 	struct timer timer;
 	int processor_id;
 	int queue_default_refill;
 	int load;
-	int cid;
+	struct sched_proc_id proc_id;
 	struct time slice;
-};
-
-struct sched_proc_id {
-	int cgid;
-	int cid;
 };
 
 struct sched_queue_config {
