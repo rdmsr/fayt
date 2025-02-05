@@ -1,12 +1,16 @@
 #ifndef FAYT_SCHED_H_ 
 #define FAYT_SCHED_H_
 
+#include <fayt/bitmap.h>
+#include <fayt/hash.h>
 #include <fayt/time.h>
 
 constexpr int SCHED_RESERVED_CID = 0x20;
 constexpr int SCHED_TICK_RATE_MS = 20;
+
 constexpr int NOT_SCHED_ENQUEUE = 1;
 constexpr int NOT_SCHED_DEQUEUE = 2;
+constexpr int NOT_SCHED_CLONE = 3;
 
 struct sched_descriptor {
 	struct timer timer;
@@ -17,13 +21,27 @@ struct sched_descriptor {
 	struct time slice;
 };
 
-struct sched_queue_config {
+struct sched_proc_id {
+	int cgid;
 	int cid;
-	int cgroup;
+};
+
+struct sched_queue_config {
+	struct sched_proc_id proc_id;
 	int nice;
 	int offload;
 	int phantom_runtime;
 	int flags;
+};
+
+struct sched_cgroup {
+	struct bitmap asid_bitmap;
+	struct hash_table asid_table;
+
+	struct bitmap cid_bitmap;
+	struct hash_table cid_table;
+
+	int cgid;
 };
 
 struct sched_queue_config_set {
@@ -32,7 +50,7 @@ struct sched_queue_config_set {
 };
 
 struct sched_queue_entry {
-	int cid;
+	struct sched_proc_id proc_id;
 	int asid;
 };
 

@@ -1,6 +1,8 @@
 #ifndef FAYT_NOTIFICATION_H_
 #define FAYT_NOTIFICATION_H_
 
+#include <fayt/sched.h>
+
 constexpr int NOTIFY_WEIGHT_SCHEDULED = (1 << 0);
 constexpr int NOTIFY_WEIGHT_TICK = (1 << 1);
 constexpr int NOTIFY_WEIGHT_INSTANTANEOUS = (1 << 2);
@@ -8,8 +10,7 @@ constexpr int NOTIFY_WEIGHT_INSTANTANEOUS = (1 << 2);
 struct [[gnu::packed]] comm_bridge {
 	int not;
 
-	int cid;
-	int cgroup;
+	struct sched_proc_id proc_id;
 	int weight;
 
 	struct {
