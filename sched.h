@@ -49,6 +49,12 @@ struct sched_queue_config_set {
 struct sched_queue_entry {
 	struct sched_proc_id proc_id;
 	int asid;
+
+	struct {
+		int active;
+		int asid;
+		int fork;
+	} birth;
 };
 
 #endif
