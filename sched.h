@@ -35,9 +35,6 @@ struct sched_queue_config {
 };
 
 struct sched_cgroup {
-	struct bitmap asid_bitmap;
-	struct hash_table asid_table;
-
 	struct bitmap cid_bitmap;
 	struct hash_table cid_table;
 
