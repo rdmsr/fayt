@@ -106,7 +106,6 @@ struct [[gnu::packed]] pci_info {
 	struct pci_descriptor descriptor;
 	int msi_capable;
 	int msix_capable;
-	int irq_vector;
 };
 
 struct [[gnu::packed]] mcfg_entry {
