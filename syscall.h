@@ -19,6 +19,7 @@ constexpr int SYSCALL_NOTIFICATION_WAIT = 11;
 constexpr int SYSCALL_NOTIFICATION_DESTROY = 12;
 constexpr int SYSCALL_IRQ_CORTEX_INSTANTIATE = 13;
 constexpr int SYSCALL_IRQ_CORTEX_ANCHOR = 14;
+constexpr int SYSCALL_FUTEX = 15;
 
 struct syscall_response {
 	int ret; 
