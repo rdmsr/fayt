@@ -107,4 +107,26 @@ struct [[gnu::packed]] portal_resp {
 	} morphology;
 };
 
+#define DUFAY_ALLOCATE_UNBROKEN(SIZE, RESP) ({ \
+	__label__ finish; \
+	int ret = 0; \
+	uintptr_t address; \
+	ret = as_address(&address_space, &address, (SIZE)); \
+	if(ret == -1) { ret = -1; goto finish; } \
+	struct portal_req portal_req = { \
+		.type = PORTAL_REQ_ANON | PORTAL_REQ_CONTINUOUS | PORTAL_REQ_PEEK, \
+		.prot = PORTAL_PROT_READ | PORTAL_PROT_WRITE, \
+		.morphology = { \
+			.addr = address, \
+			.length = ALIGN_UP((SIZE), PAGE_SIZE), \
+			.pcnt = DIV_ROUNDUP((SIZE), PAGE_SIZE) \
+		} \
+	}; \
+	struct syscall_response syscall_response = SYSCALL2(SYSCALL_PORTAL, &portal_req, (RESP)); \
+	if(syscall_response.ret == -1 || (RESP)->base != address || (RESP)->limit != \
+		ALIGN_UP((SIZE), PAGE_SIZE)) { ret = -1; goto finish; } \
+finish: \
+	ret; \
+})
+
 #endif
