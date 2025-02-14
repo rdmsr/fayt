@@ -15,7 +15,7 @@ static int cache_free_object(struct cache*, void*);
 
 #define OBJECTS_PER_SLAB 512
 
-static struct cache *root_cache;
+static struct cache *root_cache = NULL;
 
 static struct slab *cache_alloc_slab(struct cache *cache) {
 	if(unlikely(cache == NULL)) return NULL;

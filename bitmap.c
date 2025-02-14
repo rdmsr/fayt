@@ -7,7 +7,7 @@ int bitmap_alloc(struct bitmap *bitmap, int *ret) {
 	if(bitmap == NULL || ret == NULL) RETURN_ERROR;
 	if(bitmap->data == NULL) goto init;
 
-	for(int i = 0; i < (bitmap->size * 8); i++) {
+	for(int i = 0; i < bitmap->size; i++) {
 		if(BIT_TEST(bitmap->data, i) == 0) {
 			BIT_SET(bitmap->data, i); *ret = i;
 			return 0;
@@ -19,7 +19,7 @@ init:
 		if(!bitmap->size) bitmap->size = 2;
 		else bitmap->size *= 2;
 
-		bitmap->data = realloc(bitmap->data, bitmap->size);
+		bitmap->data = realloc(bitmap->data, DIV_ROUNDUP(bitmap->size, 8));
 		if(bitmap->data == NULL) RETURN_ERROR;
 
 		return bitmap_alloc(bitmap, ret);
@@ -30,7 +30,7 @@ init:
 
 int bitmap_free(struct bitmap *bitmap, int index) {
 	if(bitmap == NULL) RETURN_ERROR;
-	if(index > (bitmap->size * 8)) return 0;
+	if(index > bitmap->size) return 0;
 
 	BIT_CLEAR(bitmap->data, index);
 
