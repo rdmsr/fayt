@@ -24,14 +24,12 @@ struct [[gnu::packed]] comm_bridge {
 	int lnkidx;
 };
 
-struct notification_info {
-
-}; 
+struct notification_info {};
 
 struct notification_action {
-	void (*handler)(struct notification_info*, void*, int);
+	void (*handler)(struct notification_info *, void *, int);
 };
 
-int notify(struct comm_bridge*);
+int notify(struct comm_bridge *);
 
 #endif

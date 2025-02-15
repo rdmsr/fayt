@@ -24,12 +24,12 @@ struct time {
 struct timer {
 	int source;
 	freq_t freq;
-	struct time (*read)(struct timer*);
+	struct time (*read)(struct timer *);
 };
 
 struct time time_add(struct time, struct time);
 struct time time_sub(struct time, struct time);
-struct time time_convert(struct timer*, time_t);
+struct time time_convert(struct timer *, time_t);
 time_t time_to_ns(struct time);
 
 struct time invariant_tsc_read(struct timer *timer);

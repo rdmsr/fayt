@@ -19,14 +19,14 @@ struct address_space {
 	struct address_hole *hole_tail;
 
 	uintptr_t current;
-	uintptr_t base; 
-	size_t limit; 
+	uintptr_t base;
+	size_t limit;
 };
 
-int as_allocate(struct address_space*, uintptr_t*, size_t);
-int as_insert_hole(struct address_space*, struct address_hole*);
-int as_delete_hole(struct address_space*, uintptr_t, size_t);
-int as_address(struct address_space*, uintptr_t*, size_t);
+int as_allocate(struct address_space *, uintptr_t *, size_t);
+int as_insert_hole(struct address_space *, struct address_hole *);
+int as_delete_hole(struct address_space *, uintptr_t, size_t);
+int as_address(struct address_space *, uintptr_t *, size_t);
 
 extern struct address_space address_space;
 
