@@ -1,4 +1,4 @@
-#ifndef FAYT_SCHED_H_ 
+#ifndef FAYT_SCHED_H_
 #define FAYT_SCHED_H_
 
 #include <fayt/bitmap.h>

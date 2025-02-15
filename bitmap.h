@@ -14,8 +14,8 @@ struct bitmap {
 	int resizable;
 };
 
-int bitmap_alloc(struct bitmap*, int*);
-int bitmap_free(struct bitmap*, int index);
-int bitmap_dup(struct bitmap*, struct bitmap*);
+int bitmap_alloc(struct bitmap *, int *);
+int bitmap_free(struct bitmap *, int index);
+int bitmap_dup(struct bitmap *, struct bitmap *);
 
 #endif

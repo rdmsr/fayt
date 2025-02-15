@@ -42,25 +42,30 @@ constexpr uint32_t LINK_CIRCULAR_MAGIC = 0x9E810F7F;
 constexpr uint32_t LINK_VECTOR_MAGIC = 0xEF8647C0;
 constexpr uint32_t LINK_RAW_MAGIC = 0xFF6C7D34;
 
-#define LINK_META(LINK) ({ \
-	(LINK)->data + header->offset; \
-})
+#define LINK_META(LINK) ({ (LINK)->data + header->offset; })
 
-#define OPERATE_LINK(LINK, CLASS, OPERATION) ({ \
-	__label__ out_ol; \
-	int _ret = -1; \
-	if((LINK) == NULL) goto out_ol; \
-	static_assert((CLASS) == LINK_CIRCULAR || \
-		(CLASS) == LINK_VECTOR || (CLASS) == LINK_RAW, "Invalid link class"); \
-	if((LINK)->magic != (((CLASS) == LINK_CIRCULAR) ? \
-		LINK_CIRCULAR_MAGIC : ((CLASS == LINK_VECTOR) ? \
-		LINK_VECTOR_MAGIC : (((CLASS) == LINK_RAW) ? LINK_RAW_MAGIC : 0)))) goto out_ol; \
-	raw_spinlock(&(LINK)->lock); \
-	_ret = OPERATION; \
-	raw_spinrelease(&(LINK)->lock); \
-out_ol: \
-	_ret; \
-})
+#define OPERATE_LINK(LINK, CLASS, OPERATION)                                \
+	({                                                                      \
+		__label__ out_ol;                                                   \
+		int _ret = -1;                                                      \
+		if ((LINK) == NULL)                                                 \
+			goto out_ol;                                                    \
+		static_assert((CLASS) == LINK_CIRCULAR || (CLASS) == LINK_VECTOR || \
+						  (CLASS) == LINK_RAW,                              \
+					  "Invalid link class");                                \
+		if ((LINK)->magic !=                                                \
+			(((CLASS) == LINK_CIRCULAR) ?                                   \
+				 LINK_CIRCULAR_MAGIC :                                      \
+				 ((CLASS == LINK_VECTOR) ?                                  \
+					  LINK_VECTOR_MAGIC :                                   \
+					  (((CLASS) == LINK_RAW) ? LINK_RAW_MAGIC : 0))))       \
+			goto out_ol;                                                    \
+		raw_spinlock(&(LINK)->lock);                                        \
+		_ret = OPERATION;                                                   \
+		raw_spinrelease(&(LINK)->lock);                                     \
+out_ol:                                                                     \
+		_ret;                                                               \
+	})
 
 struct [[gnu::packed]] portal_req {
 	int type;
@@ -107,26 +112,32 @@ struct [[gnu::packed]] portal_resp {
 	} morphology;
 };
 
-#define DUFAY_ALLOCATE_UNBROKEN(SIZE, RESP) ({ \
-	__label__ finish; \
-	int ret = 0; \
-	uintptr_t address; \
-	ret = as_address(&address_space, &address, (SIZE)); \
-	if(ret == -1) { ret = -1; goto finish; } \
-	struct portal_req portal_req = { \
-		.type = PORTAL_REQ_ANON | PORTAL_REQ_CONTINUOUS | PORTAL_REQ_PEEK, \
-		.prot = PORTAL_PROT_READ | PORTAL_PROT_WRITE, \
-		.morphology = { \
-			.addr = address, \
-			.length = ALIGN_UP((SIZE), PAGE_SIZE), \
-			.pcnt = DIV_ROUNDUP((SIZE), PAGE_SIZE) \
-		} \
-	}; \
-	struct syscall_response syscall_response = SYSCALL2(SYSCALL_PORTAL, &portal_req, (RESP)); \
-	if(syscall_response.ret == -1 || (RESP)->base != address || (RESP)->limit != \
-		ALIGN_UP((SIZE), PAGE_SIZE)) { ret = -1; goto finish; } \
-finish: \
-	ret; \
-})
+#define DUFAY_ALLOCATE_UNBROKEN(SIZE, RESP)                                    \
+	({                                                                         \
+		__label__ finish;                                                      \
+		int ret = 0;                                                           \
+		uintptr_t address;                                                     \
+		ret = as_address(&address_space, &address, (SIZE));                    \
+		if (ret == -1) {                                                       \
+			ret = -1;                                                          \
+			goto finish;                                                       \
+		}                                                                      \
+		struct portal_req portal_req = {                                       \
+			.type = PORTAL_REQ_ANON | PORTAL_REQ_CONTINUOUS | PORTAL_REQ_PEEK, \
+			.prot = PORTAL_PROT_READ | PORTAL_PROT_WRITE,                      \
+			.morphology = { .addr = address,                                   \
+							.length = ALIGN_UP((SIZE), PAGE_SIZE),             \
+							.pcnt = DIV_ROUNDUP((SIZE), PAGE_SIZE) }           \
+		};                                                                     \
+		struct syscall_response syscall_response =                             \
+			SYSCALL2(SYSCALL_PORTAL, &portal_req, (RESP));                     \
+		if (syscall_response.ret == -1 || (RESP)->base != address ||           \
+			(RESP)->limit != ALIGN_UP((SIZE), PAGE_SIZE)) {                    \
+			ret = -1;                                                          \
+			goto finish;                                                       \
+		}                                                                      \
+finish:                                                                        \
+		ret;                                                                   \
+	})
 
 #endif

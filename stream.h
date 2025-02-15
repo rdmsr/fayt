@@ -6,7 +6,7 @@
 
 struct stream_info {
 	void *private;
-	void (*write)(struct stream_info*, char);
+	void (*write)(struct stream_info *, char);
 	struct spinlock lock;
 };
 

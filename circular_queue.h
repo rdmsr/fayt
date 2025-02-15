@@ -19,7 +19,8 @@ struct circular_queue {
 	size_t items;
 } __attribute__((packed));
 
-void circular_queue_init(struct circular_queue *queue, int data_offset, size_t size, size_t obj_size);
+void circular_queue_init(struct circular_queue *queue, int data_offset,
+						 size_t size, size_t obj_size);
 void circular_queue_destroy(struct circular_queue *queue);
 void circular_queue_flush(struct circular_queue *queue);
 bool circular_queue_push(struct circular_queue *queue, const void *data);
