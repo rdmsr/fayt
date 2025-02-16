@@ -5,9 +5,6 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-#define BITMAP_RESIZEABLE 0
-#define BITMAP_FIXED_SIZE 1
-
 struct bitmap {
 	unsigned char *data;
 	int size;
