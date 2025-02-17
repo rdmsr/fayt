@@ -32,10 +32,30 @@ _ret:                                                                         \
 		(THIS).data[(THIS).length++] = ELEMENT;                               \
 	})
 
-#define VECTOR_PEEK(THIS, ELEMENT) \
-	({                             \
-		__label__ finish;          \
-finish:                            \
+#define VECTOR_PEEK_END(THIS, ELEMENT)            \
+	({                                            \
+		__label__ finish;                         \
+		int _ret = 0;                             \
+		if ((THIS).length <= 0) {                 \
+			_ret = -1;                            \
+			goto finish;                          \
+		}                                         \
+		ELEMENT = (THIS).data[(THIS).length - 1]; \
+finish:                                           \
+		_ret;                                     \
+	})
+
+#define VECTOR_PEEK_BEGINNING(THIS, ELEMENT) \
+	({                                       \
+		__label__ finish;                    \
+		int _ret = 0;                        \
+		if ((THIS).length <= 0) {            \
+			_ret = -1;                       \
+			goto finish;                     \
+		}                                    \
+		ELEMENT = (THIS).data[0];            \
+finish:                                      \
+		_ret;                                \
 	})
 
 #define VECTOR_INDEX(THIS, ELEMENT, INDEX)                                \

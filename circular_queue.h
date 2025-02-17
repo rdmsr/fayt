@@ -19,13 +19,14 @@ struct circular_queue {
 	size_t items;
 } __attribute__((packed));
 
-void circular_queue_init(struct circular_queue *queue, int data_offset,
-						 size_t size, size_t obj_size);
-void circular_queue_destroy(struct circular_queue *queue);
-void circular_queue_flush(struct circular_queue *queue);
-bool circular_queue_push(struct circular_queue *queue, const void *data);
-bool circular_queue_pop(struct circular_queue *queue, void *data);
-bool circular_queue_pop_tail(struct circular_queue *queue, void *data);
-bool circular_queue_peek(struct circular_queue *queue, void *data);
+int circular_queue_init(struct circular_queue *queue, int data_offset,
+						size_t size, size_t obj_size);
+int circular_queue_destroy(struct circular_queue *queue);
+int circular_queue_flush(struct circular_queue *queue);
+int circular_queue_push(struct circular_queue *queue, const void *data);
+int circular_queue_pop(struct circular_queue *queue, void *data);
+int circular_queue_pop_tail(struct circular_queue *queue, void *data);
+int circular_queue_peek(struct circular_queue *queue, void *data);
+int circular_queue_remove(struct circular_queue *queue, const void *data);
 
 #endif
