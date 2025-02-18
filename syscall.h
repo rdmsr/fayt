@@ -20,6 +20,11 @@ constexpr int SYSCALL_NOTIFICATION_DESTROY = 12;
 constexpr int SYSCALL_IRQ_CORTEX_INSTANTIATE = 13;
 constexpr int SYSCALL_IRQ_CORTEX_ANCHOR = 14;
 constexpr int SYSCALL_FUTEX = 15;
+constexpr int SYSCALL_MSG_RECV = 16;
+constexpr int SYSCALL_MSG_SEND = 17;
+constexpr int SYSCALL_CREATE_OBJ = 18;
+constexpr int SYSCALL_DUPLICATE_OBJ = 19;
+constexpr int SYSCALL_DESTROY_OBJ = 20;
 
 struct syscall_response {
 	int ret;

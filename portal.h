@@ -30,6 +30,7 @@ struct [[gnu::packed]] portal_link {
 	unsigned int data_offset;
 	unsigned int data_limit;
 	unsigned int magic;
+	unsigned int reserved;
 
 	char data[];
 };
