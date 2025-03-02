@@ -57,6 +57,8 @@ struct sched_queue_entry {
 	} birth;
 };
 
+constexpr int CGID_SYSTEM = 0;
+
 constexpr int ARCHCTL_SCHED_ACQUIRE = 1;
 constexpr int ARCHCTL_SCHED_RELEASE = 2;
 constexpr int ARCHCTL_RESERVE_IRQ = 3;
