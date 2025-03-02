@@ -111,6 +111,7 @@ void sprint(char *str, ...)
 
 	sprint_stream_info.private = &sprint_info;
 	stream_print(&sprint_stream_info, va_arg(arg, char *), arg);
+	sprint_write(&sprint_stream_info, '\0');
 
 	spinrelease(&sprint_stream_info.lock);
 
