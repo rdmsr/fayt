@@ -1,6 +1,7 @@
 #ifndef FAYT_NOTIFICATION_H_
 #define FAYT_NOTIFICATION_H_
 
+#include <fayt/handle.h>
 #include <fayt/sched.h>
 
 constexpr int NOTIFY_WEIGHT_SCHEDULED = (1 << 0);
@@ -18,8 +19,7 @@ struct [[gnu::packed]] comm_bridge {
 		int limit;
 	} data;
 
-	const char *namespace;
-	const char *destination;
+	handle_t destination;
 
 	int lnkidx;
 };
