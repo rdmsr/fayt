@@ -3,7 +3,7 @@
 #include <fayt/string.h>
 #include <fayt/debug.h>
 #include <fayt/elf.h>
-#include <fayt/address_space.h>
+#include <fayt/address.h>
 
 static int elf64_validate(struct elf64_hdr *hdr)
 {

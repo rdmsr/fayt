@@ -1,6 +1,6 @@
 #include <fayt/compiler.h>
 #include <fayt/debug.h>
-#include <fayt/address_space.h>
+#include <fayt/address.h>
 #include <fayt/slab.h>
 #include <fayt/string.h>
 #include <fayt/aslr.h>

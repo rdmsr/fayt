@@ -24,6 +24,7 @@ constexpr int SYSCALL_MSG_SEND = 16;
 constexpr int SYSCALL_CREATE_OBJ = 17;
 constexpr int SYSCALL_DUPLICATE_OBJ = 18;
 constexpr int SYSCALL_DESTROY_OBJ = 19;
+constexpr int SYSCALL_AS_ACTION = 20;
 
 struct syscall_response {
 	int ret;
