@@ -10,7 +10,9 @@
 
 enum { AS_ACTION_CONSTRUCT, AS_ACTION_ALLOCATE, AS_ACTION_FREE };
 
-int as_allocate(handle_t handle, uintptr_t *, size_t);
-int as_free(handle_t handle, uintptr_t, size_t);
+int as_vmem_allocate(handle_t handle, uintptr_t *, size_t);
+int as_vmem_free(handle_t handle, uintptr_t, size_t);
+int as_mem_allocate(handle_t handle, uintptr_t*, size_t);
+int as_mem_free(handle_t handle, uintptr_t, size_t);
 
 #endif

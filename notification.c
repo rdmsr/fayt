@@ -13,7 +13,7 @@ int notify(struct comm_bridge *bridge)
 
 	//uintptr_t vaddr;
 	//int ret =
-	//	as_allocate(&address_space, &vaddr,
+	//	as_vmem_allocate(&address_space, &vaddr,
 	//				DIV_ROUNDUP(bridge->data.limit, PAGE_SIZE) * PAGE_SIZE);
 	//if (ret == -1)
 	//	return -1;

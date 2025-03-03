@@ -1,8 +1,38 @@
 #include <fayt/address.h>
 #include <fayt/syscall.h>
 #include <fayt/debug.h>
+#include <fayt/portal.h>
 
-int as_allocate(handle_t handle, uintptr_t *address, size_t length)
+int as_mem_allocate(handle_t handle, uintptr_t *address, size_t length)
+{
+	int ret = as_vmem_allocate(handle, address, length);
+	if(ret == -1) RETURN_ERROR;
+
+	struct portal_req portal_req = {
+		.type = PORTAL_REQ_ANON,
+		.prot = PORTAL_PROT_READ | PORTAL_PROT_WRITE,
+		.length = sizeof(struct portal_req),
+		.share = { .identifier = NULL, .type = 0, .create = 0 },
+		.morphology = { .addr = *address, .length = length }
+	};
+
+	struct portal_resp portal_resp;
+
+	struct syscall_response syscall_response =
+		SYSCALL2(SYSCALL_PORTAL, &portal_req, &portal_resp);
+	if (syscall_response.ret == -1 || portal_resp.base != *address ||
+		portal_resp.limit != length)
+		RETURN_ERROR;
+
+	return length;
+}
+
+int as_mem_free(handle_t handle, uintptr_t address, size_t length)
+{
+
+}
+
+int as_vmem_allocate(handle_t handle, uintptr_t *address, size_t length)
 {
 	struct syscall_response syscall_response = SYSCALL4(
 		SYSCALL_AS_ACTION, handle, AS_ACTION_ALLOCATE, address, length);
@@ -11,7 +41,7 @@ int as_allocate(handle_t handle, uintptr_t *address, size_t length)
 	return syscall_response.ret;
 }
 
-int as_free(handle_t handle, uintptr_t address, size_t length)
+int as_vmem_free(handle_t handle, uintptr_t address, size_t length)
 {
 	struct syscall_response syscall_response =
 		SYSCALL4(SYSCALL_AS_ACTION, handle, AS_ACTION_FREE, address, length);
