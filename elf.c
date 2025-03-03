@@ -73,7 +73,8 @@ int elf64_file_init(struct elf64_file *file)
 
 	ret = file->elf64_read(file, file->shdr, file->hdr->shoff,
 						   sizeof(struct elf64_shdr) * file->hdr->sh_num);
-	if (unlikely(ret != (int)sizeof(struct elf64_shdr) * (int)file->hdr->sh_num))
+	if (unlikely(ret !=
+				 (int)sizeof(struct elf64_shdr) * (int)file->hdr->sh_num))
 		RETURN_ERROR;
 
 	ret = elf64_validate(file->hdr);
@@ -198,7 +199,9 @@ int elf64_file_init(struct elf64_file *file)
 	return 0;
 }
 
-static int elf64_resolve_relocation(struct elf64_file *file, struct elf64_rela *relocation, uintptr_t vaddr, size_t section_offset)
+static int elf64_resolve_relocation(struct elf64_file *file,
+									struct elf64_rela *relocation,
+									uintptr_t vaddr, size_t section_offset)
 {
 	if (file == NULL || relocation == NULL)
 		RETURN_ERROR;
@@ -294,7 +297,8 @@ static int elf64_apply_relocation(struct elf64_file *file, uintptr_t vaddr,
 			(vaddr + length) < (relocation.r_offset + 8))
 			continue;
 
-		ret = elf64_resolve_relocation(file, &relocation, vaddr, section_offset);
+		ret =
+			elf64_resolve_relocation(file, &relocation, vaddr, section_offset);
 		if (ret == -1)
 			RETURN_ERROR;
 	}
@@ -312,7 +316,8 @@ static int elf64_apply_relocation(struct elf64_file *file, uintptr_t vaddr,
 			(vaddr + length) < (relocation.r_offset + 8))
 			continue;
 
-		ret = elf64_resolve_relocation(file, &relocation, vaddr, section_offset);
+		ret =
+			elf64_resolve_relocation(file, &relocation, vaddr, section_offset);
 		if (ret == -1)
 			RETURN_ERROR;
 	}
@@ -321,7 +326,8 @@ static int elf64_apply_relocation(struct elf64_file *file, uintptr_t vaddr,
 	if (file->dynamic.rel_ent == 0) {
 		return 0;
 	}
-	for (size_t i = 0; i < file->dynamic.rel_size / file->dynamic.rel_ent; i++) {
+	for (size_t i = 0; i < file->dynamic.rel_size / file->dynamic.rel_ent;
+		 i++) {
 		struct elf64_rela relocation = {
 			.r_offset = ({
 				uint64_t offset = 0, where = 0;
@@ -354,7 +360,8 @@ static int elf64_apply_relocation(struct elf64_file *file, uintptr_t vaddr,
 			(vaddr + length) < (relocation.r_offset + 8))
 			continue;
 
-		int ret = elf64_resolve_relocation(file, &relocation, vaddr, section_offset);
+		int ret =
+			elf64_resolve_relocation(file, &relocation, vaddr, section_offset);
 		if (ret == -1)
 			RETURN_ERROR;
 	}
