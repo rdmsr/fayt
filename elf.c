@@ -1,15 +1,9 @@
-#include <arch/x86/paging.h>
-#include <arch/x86/cpu.h>
-
-#include <core/virtual.h>
-#include <core/physical.h>
-#include <core/elf.h>
-#include <core/debug.h>
-
 #include <fayt/slab.h>
 #include <fayt/compiler.h>
 #include <fayt/string.h>
 #include <fayt/debug.h>
+#include <fayt/elf.h>
+#include <fayt/address_space.h>
 
 static int elf64_validate(struct elf64_hdr *hdr)
 {
@@ -79,7 +73,7 @@ int elf64_file_init(struct elf64_file *file)
 
 	ret = file->elf64_read(file, file->shdr, file->hdr->shoff,
 						   sizeof(struct elf64_shdr) * file->hdr->sh_num);
-	if (unlikely(ret != sizeof(struct elf64_shdr) * file->hdr->sh_num))
+	if (unlikely(ret != (int)sizeof(struct elf64_shdr) * (int)file->hdr->sh_num))
 		RETURN_ERROR;
 
 	ret = elf64_validate(file->hdr);
@@ -88,7 +82,7 @@ int elf64_file_init(struct elf64_file *file)
 
 	ret = file->elf64_read(file, file->phdr, file->hdr->phoff,
 						   sizeof(struct elf64_phdr) * file->hdr->ph_num);
-	if (unlikely(ret != sizeof(struct elf64_phdr) * file->hdr->ph_num))
+	if (unlikely(ret != (int)sizeof(struct elf64_phdr) * file->hdr->ph_num))
 		RETURN_ERROR;
 
 	file->strtab_hdr = &file->shdr[file->hdr->shstrndx];
@@ -97,7 +91,7 @@ int elf64_file_init(struct elf64_file *file)
 	ret = file->elf64_read(file, (char *)file->strtab,
 						   file->strtab_hdr->sh_offset,
 						   file->strtab_hdr->sh_size);
-	if (unlikely(ret != file->strtab_hdr->sh_size))
+	if (unlikely(ret != (int)file->strtab_hdr->sh_size))
 		RETURN_ERROR;
 
 	uintptr_t minimum_vaddr = 0;
@@ -122,7 +116,7 @@ int elf64_file_init(struct elf64_file *file)
 			continue;
 		struct elf64_phdr *phdr = &file->phdr[i];
 
-		for (int j = 0; j < phdr->p_filesz / sizeof(struct elf64_dyn); j++) {
+		for (size_t j = 0; j < phdr->p_filesz / sizeof(struct elf64_dyn); j++) {
 			struct elf64_dyn dyn;
 			ret = file->elf64_read(
 				file, &dyn, phdr->p_offset + j * sizeof(struct elf64_dyn),
@@ -204,10 +198,7 @@ int elf64_file_init(struct elf64_file *file)
 	return 0;
 }
 
-static int elf64_resolve_relocation(struct elf64_file *file,
-									struct elf64_rela *relocation,
-									uintptr_t vaddr, size_t length,
-									size_t section_offset)
+static int elf64_resolve_relocation(struct elf64_file *file, struct elf64_rela *relocation, uintptr_t vaddr, size_t section_offset)
 {
 	if (file == NULL || relocation == NULL)
 		RETURN_ERROR;
@@ -290,7 +281,7 @@ static int elf64_resolve_relocation(struct elf64_file *file,
 static int elf64_apply_relocation(struct elf64_file *file, uintptr_t vaddr,
 								  size_t length, size_t section_offset)
 {
-	for (int offset = 0; offset < file->dynamic.pltrel_size;
+	for (size_t offset = 0; offset < file->dynamic.pltrel_size;
 		 offset += file->dynamic.rela_ent) {
 		struct elf64_rela relocation;
 		int ret = file->elf64_read(file, &relocation,
@@ -303,13 +294,12 @@ static int elf64_apply_relocation(struct elf64_file *file, uintptr_t vaddr,
 			(vaddr + length) < (relocation.r_offset + 8))
 			continue;
 
-		ret = elf64_resolve_relocation(file, &relocation, vaddr, length,
-									   section_offset);
+		ret = elf64_resolve_relocation(file, &relocation, vaddr, section_offset);
 		if (ret == -1)
 			RETURN_ERROR;
 	}
 
-	for (int offset = 0; offset < file->dynamic.rela_size;
+	for (size_t offset = 0; offset < file->dynamic.rela_size;
 		 offset += file->dynamic.rela_ent) {
 		struct elf64_rela relocation;
 		int ret = file->elf64_read(file, &relocation,
@@ -322,8 +312,7 @@ static int elf64_apply_relocation(struct elf64_file *file, uintptr_t vaddr,
 			(vaddr + length) < (relocation.r_offset + 8))
 			continue;
 
-		ret = elf64_resolve_relocation(file, &relocation, vaddr, length,
-									   section_offset);
+		ret = elf64_resolve_relocation(file, &relocation, vaddr, section_offset);
 		if (ret == -1)
 			RETURN_ERROR;
 	}
@@ -332,10 +321,10 @@ static int elf64_apply_relocation(struct elf64_file *file, uintptr_t vaddr,
 	if (file->dynamic.rel_ent == 0) {
 		return 0;
 	}
-	for (int i = 0; i < file->dynamic.rel_size / file->dynamic.rel_ent; i++) {
+	for (size_t i = 0; i < file->dynamic.rel_size / file->dynamic.rel_ent; i++) {
 		struct elf64_rela relocation = {
 			.r_offset = ({
-				uint64_t offset, where = 0;
+				uint64_t offset = 0, where = 0;
 				uint64_t entry;
 				int ret = file->elf64_read(file, &entry,
 										   file->dynamic.rel_offset +
@@ -365,8 +354,7 @@ static int elf64_apply_relocation(struct elf64_file *file, uintptr_t vaddr,
 			(vaddr + length) < (relocation.r_offset + 8))
 			continue;
 
-		int ret = elf64_resolve_relocation(file, &relocation, vaddr, length,
-										   section_offset);
+		int ret = elf64_resolve_relocation(file, &relocation, vaddr, section_offset);
 		if (ret == -1)
 			RETURN_ERROR;
 	}
