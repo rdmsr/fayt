@@ -30,6 +30,13 @@ int as_mem_allocate(handle_t handle, uintptr_t *address, size_t length)
 
 int as_mem_free(handle_t handle, uintptr_t address, size_t length)
 {
+	int ret = as_vmem_free(handle, address, length);
+	if (ret == -1)
+		RETURN_ERROR;
+
+	// PORTAL UNMAP
+
+	return 0;
 }
 
 int as_vmem_allocate(handle_t handle, uintptr_t *address, size_t length)
