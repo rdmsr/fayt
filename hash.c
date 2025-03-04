@@ -61,10 +61,14 @@ int hash_table_push(struct hash_table *table, void *key, void *data,
 		if (table->keys[index] == NULL ||
 			memcmp(table->keys[index], key, key_size) == 0) {
 			void *key_copy = alloc(key_size);
+			if(key_copy == NULL) RETURN_ERROR;
+
 			memcpy(key_copy, key, key_size);
+
 			table->keys[index] = key_copy;
 			table->data[index] = data;
 			table->element_cnt++;
+
 			return 0;
 		}
 	}

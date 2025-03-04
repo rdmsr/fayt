@@ -119,7 +119,7 @@ struct [[gnu::packed]] portal_resp {
 		__label__ finish;                                                      \
 		int ret = 0;                                                           \
 		uintptr_t address;                                                     \
-		ret = as_vmem_allocate(CAPABILITY_SELF_AS, &address, (SIZE));                   \
+		ret = as_vmem_allocate(CAPABILITY_SELF_AS, &address, (SIZE));          \
 		if (ret == -1) {                                                       \
 			ret = -1;                                                          \
 			goto finish;                                                       \

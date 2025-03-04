@@ -55,6 +55,7 @@ int bitmap_dup(struct bitmap *bitmap, struct bitmap *dest)
 	dest->size = bitmap->size;
 	dest->resizable = bitmap->resizable;
 	dest->data = alloc(DIV_ROUNDUP(bitmap->size, 8));
+	if(dest->data == NULL) RETURN_ERROR;
 
 	memcpy8(dest->data, bitmap->data, DIV_ROUNDUP(bitmap->size, 8));
 

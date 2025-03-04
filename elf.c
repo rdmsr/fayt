@@ -63,13 +63,16 @@ static int elf64_find_section(struct elf64_file *file, struct elf64_shdr **shdr,
 int elf64_file_init(struct elf64_file *file)
 {
 	file->hdr = alloc(sizeof(struct elf64_hdr));
+	if(file->hdr == NULL) RETURN_ERROR;
 
 	int ret = file->elf64_read(file, file->hdr, 0, sizeof(struct elf64_hdr));
 	if (unlikely(ret != sizeof(struct elf64_hdr)))
 		RETURN_ERROR;
 
 	file->phdr = alloc(sizeof(struct elf64_phdr) * file->hdr->ph_num);
+	if(file->phdr == NULL) RETURN_ERROR;
 	file->shdr = alloc(sizeof(struct elf64_shdr) * file->hdr->sh_num);
+	if(file->shdr == NULL) RETURN_ERROR;
 
 	ret = file->elf64_read(file, file->shdr, file->hdr->shoff,
 						   sizeof(struct elf64_shdr) * file->hdr->sh_num);
@@ -88,6 +91,7 @@ int elf64_file_init(struct elf64_file *file)
 
 	file->strtab_hdr = &file->shdr[file->hdr->shstrndx];
 	file->strtab = alloc(file->strtab_hdr->sh_size);
+	if(file->strtab == NULL) RETURN_ERROR;
 
 	ret = file->elf64_read(file, (char *)file->strtab,
 						   file->strtab_hdr->sh_offset,

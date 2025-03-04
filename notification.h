@@ -24,7 +24,9 @@ struct [[gnu::packed]] comm_bridge {
 	int lnkidx;
 };
 
-struct notification_info {};
+struct notification_info {
+	void *private;
+};
 
 struct notification_action {
 	void (*handler)(struct notification_info *, void *, int);
