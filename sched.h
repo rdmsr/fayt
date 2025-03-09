@@ -1,6 +1,7 @@
 #ifndef FAYT_SCHED_H_
 #define FAYT_SCHED_H_
 
+#include <fayt/handle.h>
 #include <fayt/bitmap.h>
 #include <fayt/hash.h>
 #include <fayt/time.h>
@@ -24,6 +25,12 @@ struct sched_descriptor {
 	int load;
 	struct sched_proc_id proc_id;
 	struct time slice;
+};
+
+struct sched_startup {
+	struct sched_descriptor *descriptor;
+	int processor_cnt;
+	handle_t handles[];
 };
 
 struct sched_queue_config {

@@ -1,8 +1,6 @@
 #ifndef FAYT_HANDLE_H_
 #define FAYT_HANDLE_H_
 
-#include <fayt/sched.h>
-
 #include <stdint.h>
 
 #define HANDLE_ACCESS_READ (1 << 0)
