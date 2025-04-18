@@ -1,7 +1,7 @@
 #ifndef FAYT_SCHED_H_
 #define FAYT_SCHED_H_
 
-#include <fayt/handle.h>
+#include <fayt/capability.h>
 #include <fayt/bitmap.h>
 #include <fayt/hash.h>
 #include <fayt/time.h>
@@ -30,7 +30,7 @@ struct sched_descriptor {
 struct sched_startup {
 	struct sched_descriptor *descriptor;
 	int processor_cnt;
-	handle_t handles[];
+	capability_t capabilitys[];
 };
 
 struct sched_queue_config {

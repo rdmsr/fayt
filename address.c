@@ -3,9 +3,9 @@
 #include <fayt/debug.h>
 #include <fayt/portal.h>
 
-int as_mem_allocate(handle_t handle, uintptr_t *address, size_t length)
+int as_mem_allocate(capability_t capability, uintptr_t *address, size_t length)
 {
-	int ret = as_vmem_allocate(handle, address, length);
+	int ret = as_vmem_allocate(capability, address, length);
 	if (ret == -1)
 		RETURN_ERROR;
 
@@ -28,9 +28,9 @@ int as_mem_allocate(handle_t handle, uintptr_t *address, size_t length)
 	return length;
 }
 
-int as_mem_free(handle_t handle, uintptr_t address, size_t length)
+int as_mem_free(capability_t capability, uintptr_t address, size_t length)
 {
-	int ret = as_vmem_free(handle, address, length);
+	int ret = as_vmem_free(capability, address, length);
 	if (ret == -1)
 		RETURN_ERROR;
 
@@ -39,19 +39,19 @@ int as_mem_free(handle_t handle, uintptr_t address, size_t length)
 	return 0;
 }
 
-int as_vmem_allocate(handle_t handle, uintptr_t *address, size_t length)
+int as_vmem_allocate(capability_t capability, uintptr_t *address, size_t length)
 {
 	struct syscall_response syscall_response = SYSCALL4(
-		SYSCALL_AS_ACTION, handle, AS_ACTION_ALLOCATE, address, length);
+		SYSCALL_AS_ACTION, capability, AS_ACTION_ALLOCATE, address, length);
 	if (syscall_response.ret == -1)
 		RETURN_ERROR;
 	return syscall_response.ret;
 }
 
-int as_vmem_free(handle_t handle, uintptr_t address, size_t length)
+int as_vmem_free(capability_t capability, uintptr_t address, size_t length)
 {
 	struct syscall_response syscall_response =
-		SYSCALL4(SYSCALL_AS_ACTION, handle, AS_ACTION_FREE, address, length);
+		SYSCALL4(SYSCALL_AS_ACTION, capability, AS_ACTION_FREE, address, length);
 	if (syscall_response.ret == -1)
 		RETURN_ERROR;
 	return syscall_response.ret;

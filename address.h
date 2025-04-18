@@ -1,7 +1,7 @@
 #ifndef FAYT_ADDRESS_H_
 #define FAYT_ADDRESS_H_
 
-#include <fayt/handle.h>
+#include <fayt/capability.h>
 
 #include <stddef.h>
 #include <stdint.h>
@@ -10,9 +10,9 @@
 
 enum { AS_ACTION_CONSTRUCT, AS_ACTION_ALLOCATE, AS_ACTION_FREE };
 
-int as_vmem_allocate(handle_t handle, uintptr_t *, size_t);
-int as_vmem_free(handle_t handle, uintptr_t, size_t);
-int as_mem_allocate(handle_t handle, uintptr_t *, size_t);
-int as_mem_free(handle_t handle, uintptr_t, size_t);
+int as_vmem_allocate(capability_t capability, uintptr_t *, size_t);
+int as_vmem_free(capability_t capability, uintptr_t, size_t);
+int as_mem_allocate(capability_t capability, uintptr_t *, size_t);
+int as_mem_free(capability_t capability, uintptr_t, size_t);
 
 #endif

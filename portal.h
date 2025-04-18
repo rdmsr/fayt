@@ -2,7 +2,7 @@
 #define FAYT_PORTAL_H_
 
 #include <fayt/lock.h>
-#include <fayt/handle.h>
+#include <fayt/capability.h>
 
 #include <stdint.h>
 #include <stddef.h>
@@ -83,12 +83,12 @@ struct [[gnu::packed]] portal_req {
 
 	struct [[gnu::packed]] {
 		struct {
-			handle_t handle;
+			capability_t capability;
 			uintptr_t base;
 		} source;
 
 		struct {
-			handle_t handle;
+			capability_t capability;
 			uintptr_t base;
 		} destination;
 

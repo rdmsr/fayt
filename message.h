@@ -1,7 +1,7 @@
 #ifndef MESSAGE_H_
 #define MESSAGE_H_
 
-#include <fayt/handle.h>
+#include <fayt/capability.h>
 
 #include <stddef.h>
 #include <stdint.h>
@@ -13,8 +13,8 @@
 #define PORT_RIGHT_SEND_ONCE (1 << 2)
 
 struct message_header {
-	handle_t destination;
-	handle_t reply;
+	capability_t destination;
+	capability_t reply;
 	size_t size;
 };
 
