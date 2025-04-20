@@ -50,8 +50,8 @@ int as_vmem_allocate(capability_t capability, uintptr_t *address, size_t length)
 
 int as_vmem_free(capability_t capability, uintptr_t address, size_t length)
 {
-	struct syscall_response syscall_response =
-		SYSCALL4(SYSCALL_AS_ACTION, capability, AS_ACTION_FREE, address, length);
+	struct syscall_response syscall_response = SYSCALL4(
+		SYSCALL_AS_ACTION, capability, AS_ACTION_FREE, address, length);
 	if (syscall_response.ret == -1)
 		RETURN_ERROR;
 	return syscall_response.ret;

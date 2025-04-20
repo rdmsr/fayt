@@ -3,11 +3,11 @@
 
 #include <stdint.h>
 
-#define HANDLE_ACCESS_READ (1 << 0)
-#define HANDLE_ACCESS_WRITE (1 << 1)
+#define CAPABILITY_ACCESS_READ (1 << 0)
+#define CAPABILITY_ACCESS_WRITE (1 << 1)
 
 typedef uint32_t capability_t;
 
-enum { CAPABILITY_SELF_AS, CAPABILITY_SELF_SCHED };
+enum { CAPABILITY_SELF_THREAD, CAPABILITY_SELF_AS };
 
 #endif

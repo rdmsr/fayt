@@ -10,8 +10,6 @@ constexpr int NOTIFY_WEIGHT_INSTANTANEOUS = (1 << 2);
 
 struct [[gnu::packed]] comm_bridge {
 	int not;
-
-	struct sched_proc_id proc_id;
 	int weight;
 
 	struct {

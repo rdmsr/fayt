@@ -1,5 +1,5 @@
-#ifndef MESSAGE_H_
-#define MESSAGE_H_
+#ifndef FAYT_MESSAGE_H_
+#define FAYT_MESSAGE_H_
 
 #include <fayt/capability.h>
 
