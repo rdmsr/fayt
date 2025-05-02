@@ -132,7 +132,7 @@ out_rbi:                                                                   \
 		ret;                                                               \
 	})
 
-#define RB_GENERIC_DELETE(TABLE_ROOT, BASE, NODE)                           \
+#define RB_GENERIC_DELETE(TABLE_ROOT, NODE)                                 \
 	({                                                                      \
 		__label__ out_rbd;                                                  \
 		__typeof__(NODE) sibling = (NODE)->parent ?                         \
@@ -140,7 +140,7 @@ out_rbi:                                                                   \
 											(NODE)->parent->right :         \
 											(NODE)->parent->left) :         \
 									   NULL;                                \
-		int ret = BST_GENERIC_DELETE(TABLE_ROOT, BASE, NODE);               \
+		int ret = BST_GENERIC_DELETE(TABLE_ROOT, NODE);                     \
 		if (ret == -1)                                                      \
 			goto out_rbd;                                                   \
 		if (sibling == NULL)                                                \
