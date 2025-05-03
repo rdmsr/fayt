@@ -3,7 +3,7 @@
 
 #include <fayt/capability.h>
 #include <fayt/bitmap.h>
-#include <fayt/hash.h>
+#include <fayt/dictionary.h>
 #include <fayt/time.h>
 
 constexpr int ARCHCTL_SCHED_ACQUIRE = 1;

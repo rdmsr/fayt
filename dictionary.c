@@ -1,6 +1,6 @@
 #include <fayt/slab.h>
 #include <fayt/string.h>
-#include <fayt/hash.h>
+#include <fayt/dictionary.h>
 #include <fayt/debug.h>
 
 static uint64_t fnv_hash(char *data, size_t byte_cnt)
@@ -15,7 +15,7 @@ static uint64_t fnv_hash(char *data, size_t byte_cnt)
 	return hash;
 }
 
-int hash_table_search(struct hash_table *table, void *key, size_t key_size,
+int dictionary_search(struct dictionary *table, void *key, size_t key_size,
 					  void **ret)
 {
 	if (table == NULL || key == NULL || ret == NULL)
@@ -37,7 +37,7 @@ int hash_table_search(struct hash_table *table, void *key, size_t key_size,
 	return -1;
 }
 
-int hash_table_push(struct hash_table *table, void *key, void *data,
+int dictionary_push(struct dictionary *table, void *key, void *data,
 					size_t key_size)
 {
 	if (table == NULL || key == NULL)
@@ -84,10 +84,10 @@ int hash_table_push(struct hash_table *table, void *key, void *data,
 	if (table->keys == NULL)
 		RETURN_ERROR;
 
-	return hash_table_push(table, key, data, key_size);
+	return dictionary_push(table, key, data, key_size);
 }
 
-int hash_table_delete(struct hash_table *table, void *key, size_t key_size)
+int dictionary_delete(struct dictionary *table, void *key, size_t key_size)
 {
 	if (table == NULL)
 		RETURN_ERROR;
@@ -110,7 +110,7 @@ int hash_table_delete(struct hash_table *table, void *key, size_t key_size)
 	RETURN_ERROR;
 }
 
-int hash_table_destroy(struct hash_table *table)
+int dictionary_destroy(struct dictionary *table)
 {
 	if (table == NULL)
 		RETURN_ERROR;
