@@ -5,6 +5,16 @@
 #include <fayt/string.h>
 #include <fayt/aslr.h>
 
+static uint64_t rdrand()
+{
+#if defined(__amd64__)
+	uint64_t ret;
+	__asm__ volatile("rdrand %0" : "=r"(ret));
+	return ret;
+#else
+	return 0;
+#endif
+}
 int aslr_generate_layout(struct aslr *aslr, struct aslr_layout **ret,
 						 size_t length)
 {
@@ -20,12 +30,7 @@ int aslr_generate_layout(struct aslr *aslr, struct aslr_layout **ret,
 	for (;;) {
 		layout->lower_bound =
 			ALIGN_UP(aslr->minimum_vaddr +
-						 (({
-							  uint64_t ret;
-							  __asm__ volatile("rdrand %0" : "=r"(ret));
-							  ret;
-						  }) %
-						  (aslr->maximum_vaddr - aslr->minimum_vaddr)),
+						 rdrand() % (aslr->maximum_vaddr - aslr->minimum_vaddr),
 					 PAGE_SIZE);
 		layout->upper_bound = layout->lower_bound + length;
 

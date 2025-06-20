@@ -108,7 +108,7 @@ struct syscall_response {
 						 : "memory");                                 \
 	})
 
-#else
+#elif defined(__amd64__)
 
 #define SYSCALL0(NUM)                                                \
 	({                                                               \
@@ -183,6 +183,44 @@ struct syscall_response {
 						 : "a"(NUM), "D"(ARG0), "S"(ARG1), "d"(ARG2), \
 						   "r"(arg3), "r"(arg4), "r"(arg5)            \
 						 : "rcx", "r11", "memory");                   \
+	})
+
+#else
+/* Stubs */
+#define SYSCALL0(NUM)                                                  \
+	({                                                                 \
+		struct syscall_response _response = { .ret = -1, .code = -1 }; \
+		_response;                                                     \
+	})
+#define SYSCALL1(NUM, ARG0)                                            \
+	({                                                                 \
+		struct syscall_response _response = { .ret = -1, .code = -1 }; \
+		_response;                                                     \
+	})
+#define SYSCALL2(NUM, ARG0, ARG1)                                      \
+	({                                                                 \
+		struct syscall_response _response = { .ret = -1, .code = -1 }; \
+		_response;                                                     \
+	})
+#define SYSCALL3(NUM, ARG0, ARG1, ARG2)                                \
+	({                                                                 \
+		struct syscall_response _response = { .ret = -1, .code = -1 }; \
+		_response;                                                     \
+	})
+#define SYSCALL4(NUM, ARG0, ARG1, ARG2, ARG3)                          \
+	({                                                                 \
+		struct syscall_response _response = { .ret = -1, .code = -1 }; \
+		_response;                                                     \
+	})
+#define SYSCALL5(NUM, ARG0, ARG1, ARG2, ARG3, ARG4)                    \
+	({                                                                 \
+		struct syscall_response _response = { .ret = -1, .code = -1 }; \
+		_response;                                                     \
+	})
+#define SYSCALL6(NUM, ARG0, ARG1, ARG2, ARG3, ARG4, ARG5)              \
+	({                                                                 \
+		struct syscall_response _response = { .ret = -1, .code = -1 }; \
+		_response;                                                     \
 	})
 
 #endif
