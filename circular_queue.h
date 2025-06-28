@@ -4,7 +4,6 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
-#include <stdatomic.h>
 
 struct circular_queue {
 	int data_offset;

@@ -6,16 +6,11 @@ struct time invariant_tsc_read(struct timer *timer)
 	if (timer == NULL)
 		return ret;
 
-#if defined(__amd64__)
 	uint64_t tsc = ({
 		uint64_t rax, rdx;
 		__asm__ volatile("rdtsc" : "=a"(rax), "=d"(rdx));
 		(uint64_t)rax | ((uint64_t)rdx << 32);
 	});
-
-#else
-	uint64_t tsc = 0;
-#endif
 
 	uint64_t ns = (tsc * NANO_PER_SECOND) / timer->freq;
 
